@@ -4,7 +4,10 @@ from .models import CountyName, EarthquakeData, EarthquakeEvent, SeverityLevel
 def generate_events(data: EarthquakeData) -> list[EarthquakeEvent]:
     events = []
     magnitude = float(data.magnitude_value)
-    county_intensity_map = {area.county_name: float(area.area_intensity) for area in (data.shaking_area or [])}
+    county_intensity_map = {
+        area.county_name: float(area.area_intensity)
+        for area in (data.shaking_area or [])
+    }
 
     for county in CountyName:
         # get intensity value for the county
