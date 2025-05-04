@@ -31,3 +31,16 @@ class EarthquakeData(CustomBaseModel):
     magnitude_value: str
     focal_depth: str
     shaking_area: list[ShakingArea] | None = None
+
+
+class SeverityLevel(str, Enum):
+    NA = "NA"
+    L1 = "L1"
+    L2 = "L2"
+
+
+class EarthquakeEvent(BaseModel):
+    source: str
+    origin_time: datetime
+    county_name: CountyName
+    severity_level: SeverityLevel
