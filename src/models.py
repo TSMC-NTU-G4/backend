@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum
 
 from pydantic import BaseModel, ConfigDict
 from pydantic.alias_generators import to_camel
@@ -11,8 +12,15 @@ class CustomBaseModel(BaseModel):
     )
 
 
+class CountyName(str, Enum):
+    TAIPEI = "Taipei"
+    HSINCHU = "Hsinchu"
+    TAICHUNG = "Taichung"
+    TAINAN = "Tainan"
+
+
 class ShakingArea(CustomBaseModel):
-    county_name: str
+    county_name: CountyName
     area_intensity: str
 
 
