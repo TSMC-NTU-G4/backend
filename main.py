@@ -1,6 +1,8 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
+
+from src import models
 
 app = FastAPI()
 
@@ -21,6 +23,11 @@ app.add_middleware(
 @app.get("/")
 def main() -> str:
     return "Hello from backend!"
+
+
+@app.post("/api/earthquake")
+def create_earthquake(data: models.EarthquakeData) -> Response:
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 if __name__ == "__main__":
