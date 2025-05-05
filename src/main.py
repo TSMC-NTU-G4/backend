@@ -1,14 +1,19 @@
+import os
+
 import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from routers import earthquake
 
+# load env variables
+load_dotenv()
 app = FastAPI()
 
 # enable CORS related config
 origins = [
-    "http://localhost:5173",
+    os.environ.get("FRONTEND_BASE_URL"),
 ]
 
 app.add_middleware(
