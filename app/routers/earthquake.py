@@ -8,6 +8,5 @@ router = APIRouter()
 
 @router.post("/earthquake")
 def create_earthquake(data: EarthquakeData) -> Response:
-    a = generate_events(data)
-    print(a)
+    generate_events(data)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
