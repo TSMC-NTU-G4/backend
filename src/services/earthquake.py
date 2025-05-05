@@ -1,4 +1,5 @@
-from .models import CountyName, EarthquakeData, EarthquakeEvent, SeverityLevel
+from models.earthquake import EarthquakeData, EarthquakeEvent
+from models.enums import Location, SeverityLevel
 
 
 def generate_events(data: EarthquakeData) -> list[EarthquakeEvent]:
@@ -9,9 +10,9 @@ def generate_events(data: EarthquakeData) -> list[EarthquakeEvent]:
         for area in (data.shaking_area or [])
     }
 
-    for county in CountyName:
-        # get intensity value for the county
-        intensity = county_intensity_map.get(county, 0) if data.shaking_area else 0
+    for location in Location:
+        # get intensity value for the location
+        intensity = county_intensity_map.get(location, 0) if data.shaking_area else 0
 
         # determine severity level based on intensity and magnitude
         severity = classify_severity(magnitude, intensity)
@@ -19,7 +20,7 @@ def generate_events(data: EarthquakeData) -> list[EarthquakeEvent]:
         event = EarthquakeEvent(
             source=data.source,
             origin_time=data.origin_time,
-            county_name=county,
+            location=location,
             severity_level=severity,
         )
         events.append(event)
