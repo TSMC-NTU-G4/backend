@@ -1,5 +1,5 @@
-from models.earthquake import EarthquakeData, EarthquakeEvent
-from models.enums import Location, SeverityLevel
+from app.models.earthquake import EarthquakeData, EarthquakeEvent
+from app.models.enums import Location, SeverityLevel
 
 
 def generate_events(data: EarthquakeData) -> list[EarthquakeEvent]:

@@ -1,11 +1,10 @@
 import os
 
-import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers import earthquake
+from app.routers import earthquake
 
 # load env variables
 load_dotenv()
@@ -26,6 +25,3 @@ app.add_middleware(
 
 
 app.include_router(earthquake.router, prefix="/api", tags=["earthquake"])
-
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
