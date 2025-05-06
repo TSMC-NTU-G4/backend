@@ -46,4 +46,4 @@ docker run -p 8000:8000 backend   # run container
     }
     ```
   - Response
-    - status: `204 No Content`
+    - Status: `204 No Content`
