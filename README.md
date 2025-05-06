@@ -2,8 +2,12 @@
 
 ## Project setup
 ```bash
-# install dependencies
 uv sync --frozen --no-cache
+```
+
+## Configure environment
+```bash
+cp .env.example .env  # modify values in .env accordingly
 ```
 
 ## Start the development server
@@ -13,8 +17,8 @@ uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 ## Lint and fix files
 ```bash
-uv run ruff format . 
-uv run ruff check . --fix  
+uvx ruff format .  
+uvx ruff check . --fix   
 ```
 
 ## Run backend with Docker
