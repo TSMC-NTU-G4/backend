@@ -27,6 +27,7 @@ app.add_middleware(
 
 app.include_router(earthquake.router, prefix="/api", tags=["earthquake"])
 
+
 @app.get("/")
 def root():
     return {"message": "Welcome to the Earthquake API!"}
