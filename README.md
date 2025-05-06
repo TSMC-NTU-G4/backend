@@ -2,6 +2,7 @@
 
 ## Project setup
 ```bash
+# install dependencies
 uv sync --frozen --no-cache
 ```
 
@@ -14,6 +15,12 @@ uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```bash
 uv run ruff format . 
 uv run ruff check . --fix  
+```
+
+## Run backend with Docker
+```bash
+docker build -t backend .         # build image
+docker run -p 8000:8000 backend   # run container
 ```
 
 ## API document
@@ -39,4 +46,4 @@ uv run ruff check . --fix
     }
     ```
   - Response
-    - `204 No Content`
+    - status: `204 No Content`
