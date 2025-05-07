@@ -4,10 +4,9 @@ from app.models.enums import Location, SeverityLevel
 
 def generate_events(data: EarthquakeData) -> list[EarthquakeEvent]:
     events = []
-    magnitude = float(data.magnitude_value)
+    magnitude = data.magnitude_value
     county_intensity_map = {
-        area.county_name: float(area.area_intensity)
-        for area in (data.shaking_area or [])
+        area.county_name: area.area_intensity for area in data.shaking_area
     }
 
     for location in Location:
