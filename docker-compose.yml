@@ -12,8 +12,11 @@ services:
       - monitor-network
     depends_on:
       - prometheus
+      - redis
     command: >
       uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    env_file:
+      - .env
   
   prometheus:
     image: prom/prometheus:latest
@@ -27,6 +30,19 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
 
+  redis:
+    image: redis:alpine
+    container_name: redis
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - monitor-network
+
 networks:
   monitor-network:
     driver: bridge
+
+volumes:
+  redis-data:
