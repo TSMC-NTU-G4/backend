@@ -26,6 +26,14 @@ uvx ruff check . --fix
 docker-compose build
 docker-compose up -d
 ```
+> ✅ Changes in `app/` are auto-reloaded.
+
+> ⚠️ For config updates (e.g. `Dockerfile`, `docker-compose.yml`), kindly restart with: 
+> ```bash
+> docker-compose down
+> docker-compose up -d
+> ```
+
 
 ## API document
 - POST `/api/earthquake`
