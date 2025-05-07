@@ -13,12 +13,12 @@ earthquake_occurrences = Counter(
 earthquake_magnitude = Gauge(
     "earthquake_magnitude",
     "Magnitude value of earthquake data",
-    ["source", "id", "location"],
+    ["source", "id", "epicenter"],
 )
 earthquake_depth = Gauge(
     "earthquake_depth",
     "Focal depth of earthquake data",
-    ["source", "id", "location"],
+    ["source", "id", "epicenter"],
 )
 
 
@@ -33,10 +33,10 @@ def observe_earthquake_data(data: EarthquakeData) -> None:
     earthquake_magnitude.labels(
         id=earthquake_id,
         source=data.source,
-        location=data.epicenter_location,
+        epicenter=data.epicenter_location,
     ).set(data.magnitude_value)
     earthquake_depth.labels(
         id=earthquake_id,
         source=data.source,
-        location=data.epicenter_location,
+        epicenter=data.epicenter_location,
     ).set(data.focal_depth)
