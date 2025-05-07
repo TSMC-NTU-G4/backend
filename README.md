@@ -21,10 +21,10 @@ uvx ruff format .
 uvx ruff check . --fix   
 ```
 
-## Run backend with Docker
+## Build and start services
 ```bash
-docker build -t backend .         # build image
-docker run -p 8000:8000 backend   # run container
+docker-compose build
+docker-compose up -d
 ```
 
 ## API document
