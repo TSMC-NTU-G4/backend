@@ -1,5 +1,3 @@
-import uuid
-
 from prometheus_client import Counter, Gauge
 
 from app.models.earthquake import EarthquakeData
@@ -23,20 +21,17 @@ earthquake_depth = Gauge(
 
 
 def observe_earthquake_data(data: EarthquakeData) -> None:
-    # generate unique id
-    earthquake_id = str(uuid.uuid4())
-
     # increment occurrence counter
     earthquake_occurrences_total.labels(source=data.source).inc()
 
     # set magnitude and depth value
     earthquake_magnitude.labels(
-        id=earthquake_id,
+        id=str(data.id),
         source=data.source,
         epicenter=data.epicenter_location,
     ).set(data.magnitude_value)
     earthquake_depth.labels(
-        id=earthquake_id,
+        id=str(data.id),
         source=data.source,
         epicenter=data.epicenter_location,
     ).set(data.focal_depth)
