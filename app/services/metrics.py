@@ -5,8 +5,8 @@ from prometheus_client import Counter, Gauge
 from app.models.earthquake import EarthquakeData
 
 # --- Earthquake data metrics ---
-earthquake_occurrences = Counter(
-    "earthquake_occurrences",
+earthquake_occurrences_total = Counter(
+    "earthquake_occurrences_total",
     "Total number of earthquake data",
     ["source"],
 )
@@ -27,7 +27,7 @@ def observe_earthquake_data(data: EarthquakeData) -> None:
     earthquake_id = str(uuid.uuid4())
 
     # increment occurrence counter
-    earthquake_occurrences.labels(source=data.source).inc()
+    earthquake_occurrences_total.labels(source=data.source).inc()
 
     # set magnitude and depth value
     earthquake_magnitude.labels(
