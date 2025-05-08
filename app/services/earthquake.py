@@ -2,7 +2,7 @@ import json
 from datetime import datetime, timedelta
 
 from app.core.redis import get_alert_suppress_time, redis_client
-from app.models.earthquake import EarthquakeData, EarthquakeEvent
+from app.models.earthquake import EarthquakeAlert, EarthquakeData, EarthquakeEvent
 from app.models.enums import Location, SeverityLevel
 
 # map severity level to their index
@@ -40,7 +40,8 @@ def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeEvent]:
     alert_suppress_time = get_alert_suppress_time()
 
     for event in events:
-        cached_alert = redis_client.get(f"alert_{event.location.value}")
+        redis_key = f"alert_{event.location.value}"
+        cached_alert = redis_client.get(redis_key)
 
         # found an existing alert with the same location as current event
         if cached_alert:
@@ -60,9 +61,17 @@ def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeEvent]:
 
         # current event should trigger an alert
         if event.severity_level != SeverityLevel.NA:
-            alerts.append(event)
-            alert_json = event.model_dump_json()
-            redis_client.set(f"alert_{event.location.value}", alert_json)
+            alert = EarthquakeAlert(
+                id=f"{event.id}",
+                source=event.source,
+                origin_time=event.origin_time,
+                location=event.location,
+                severity_level=event.severity_level,
+                status="unprocessed",
+                processing_furation=0,  # Add real logic later
+            )
+            alerts.append(alert)
+            redis_client.set(redis_key, alert.model_dump_json())
 
     return alerts
 

@@ -28,3 +28,13 @@ class EarthquakeEvent(BaseModel):
     origin_time: datetime
     location: Location
     severity_level: SeverityLevel
+
+
+class EarthquakeAlert(BaseModel):
+    id: str
+    source: str
+    origin_time: datetime
+    location: Location
+    severity_level: SeverityLevel
+    status: str
+    processing_furation: int
