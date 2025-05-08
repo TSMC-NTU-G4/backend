@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta
 
-from app.core.redis import redis_client
+from app.core.redis import get_alert_suppress_time, redis_client
 from app.models.earthquake import EarthquakeData, EarthquakeEvent
 from app.models.enums import Location, SeverityLevel
 
@@ -37,6 +37,7 @@ def generate_events(data: EarthquakeData) -> list[EarthquakeEvent]:
 
 def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeEvent]:
     alerts = []
+    alert_suppress_time = get_alert_suppress_time()
 
     for event in events:
         cached_alert = redis_client.get(f"alert_{event.location.value}")
@@ -50,10 +51,11 @@ def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeEvent]:
             )
 
             # current event should be suppressed
-            # TODO: replace harcoded 1min with ALERT_SUPPRESS_TIME env variable
             if severity_level_dict[event.severity_level.value] <= severity_level_dict[
                 cached_severity_level
-            ] and event.origin_time - cached_origin_time <= timedelta(minutes=1):
+            ] and event.origin_time - cached_origin_time <= timedelta(
+                seconds=alert_suppress_time,
+            ):
                 continue
 
         # current event should trigger an alert

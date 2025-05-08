@@ -4,10 +4,10 @@ from app.models.earthquake import EarthquakeData, EarthquakeEvent
 from app.services.earthquake import generate_alerts, generate_events
 from app.services.metrics import observe_earthquake_data
 
-router = APIRouter()
+router = APIRouter(prefix="/api/earthquake", tags=["earthquake"])
 
 
-@router.post("/earthquake")
+@router.post("/")
 def create_earthquake(data: EarthquakeData) -> list[EarthquakeEvent]:
     # update metrics for earthquake data
     observe_earthquake_data(data)
