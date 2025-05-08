@@ -12,3 +12,9 @@ class SeverityLevel(str, Enum):
     NA = "NA"
     L1 = "L1"
     L2 = "L2"
+
+
+class TriState(str, Enum):
+    TRUE = "true"
+    FALSE = "false"
+    UNKNOWN = "unknown"
