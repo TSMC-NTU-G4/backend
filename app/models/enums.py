@@ -8,7 +8,7 @@ class Location(str, Enum):
     TAINAN = "Tainan"
 
 
-class SeverityLevel(str, Enum):
+class SeverityLevel(int, Enum):
     NA = 0
     L1 = 1
     L2 = 2
