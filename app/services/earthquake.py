@@ -35,7 +35,7 @@ def generate_events(data: EarthquakeData) -> list[EarthquakeEvent]:
     return events
 
 
-def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeEvent]:
+def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeAlert]:
     alerts = []
     alert_suppress_time = get_alert_suppress_time()
 
