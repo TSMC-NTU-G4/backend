@@ -1,6 +1,11 @@
 from prometheus_client import Counter, Gauge
 
 from app.models.earthquake import EarthquakeAlert, EarthquakeData, EarthquakeEvent
+from app.models.enums import SeverityLevel
+
+# map severity level to their index
+severity_level_dict = {level.value: i for i, level in enumerate(SeverityLevel)}
+
 
 # --- Earthquake data metrics ---
 earthquake_occurrences_total = Counter(
@@ -63,16 +68,15 @@ earthquake_events_severity = Gauge(
 )
 
 
-def observe_earthquake_events(event: EarthquakeEvent) -> None:
-    # increment event counter
-    earthquake_events_total.labels(source=event.source).inc()
+def observe_earthquake_events(events: list[EarthquakeEvent]) -> None:
+    for event in events:
+        earthquake_events_total.labels(source=event.source).inc()
 
-    # set severity level
-    earthquake_events_severity.labels(
-        id=str(event.id),
-        source=event.source,
-        location=event.location.value,
-    ).set(event.severity_level.value)
+        earthquake_events_severity.labels(
+            id=str(event.id),
+            source=event.source,
+            location=event.location.value,
+        ).set(severity_level_dict[event.severity_level.value])
 
 
 # --- Earthquake alert metrics ---
@@ -98,30 +102,30 @@ earthquake_alerts_processing_duration = Gauge(
 )
 
 
-def observe_earthquake_alerts(alert: EarthquakeAlert) -> None:
-    # increment alert counter
-    earthquake_alerts_total.labels(source=alert.source).inc()
+def observe_earthquake_alerts(alerts: list[EarthquakeAlert]) -> None:
+    for alert in alerts:
+        earthquake_alerts_total.labels(source=alert.source).inc()
 
-    # set damage and command center flags
-    earthquake_alerts_damage.labels(
-        id=str(alert.id),
-        source=alert.source,
-        location=alert.location.value,
-        origin_time=alert.origin_time.isoformat(),
-    ).set(alert.has_damage.value)
-    earthquake_alerts_command_center.labels(
-        id=str(alert.id),
-        source=alert.source,
-        location=alert.location.value,
-        origin_time=alert.origin_time.isoformat(),
-    ).set(alert.needs_command_center.value)
-    # set processing duration
-    earthquake_alerts_processing_duration.labels(
-        id=str(alert.id),
-        source=alert.source,
-        location=alert.location.value,
-        origin_time=alert.origin_time.isoformat(),
-    ).set(alert.processing_duration)
+        earthquake_alerts_damage.labels(
+            id=str(alert.id),
+            source=alert.source,
+            location=alert.location.value,
+            origin_time=alert.origin_time.isoformat(),
+        ).set(alert.has_damage.value)
+
+        earthquake_alerts_command_center.labels(
+            id=str(alert.id),
+            source=alert.source,
+            location=alert.location.value,
+            origin_time=alert.origin_time.isoformat(),
+        ).set(alert.needs_command_center.value)
+
+        earthquake_alerts_processing_duration.labels(
+            id=str(alert.id),
+            source=alert.source,
+            location=alert.location.value,
+            origin_time=alert.origin_time.isoformat(),
+        ).set(alert.processing_duration)
 
 
 def observe_earthquake_alert_report() -> None:
