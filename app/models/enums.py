@@ -14,7 +14,7 @@ class SeverityLevel(str, Enum):
     L2 = "L2"
 
 
-class TriState(str, Enum):
+class TriState(int, Enum):
     TRUE = 1
     FALSE = 0
     UNKNOWN = -1
