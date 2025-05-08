@@ -15,6 +15,6 @@ class SeverityLevel(str, Enum):
 
 
 class TriState(str, Enum):
-    TRUE = "true"
-    FALSE = "false"
-    UNKNOWN = "unknown"
+    TRUE = 1
+    FALSE = 0
+    UNKNOWN = -1
