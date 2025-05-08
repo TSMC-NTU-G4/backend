@@ -39,6 +39,21 @@ services:
       - "6379:6379"
     networks:
       - monitor-network
+  
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - monitor-network
+    depends_on:
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
 
 networks:
   monitor-network:
@@ -46,3 +61,4 @@ networks:
 
 volumes:
   redis-data:
+  grafana-storage:
