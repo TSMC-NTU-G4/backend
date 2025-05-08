@@ -18,6 +18,11 @@ earthquake_depth = Gauge(
     "Focal depth of earthquake data",
     ["source", "id", "epicenter"],
 )
+earthquake_intensity = Gauge(
+    "earthquake_intensity",
+    "Area intensity of earthquake data",
+    ["source", "id", "area"],
+)
 
 
 def observe_earthquake_data(data: EarthquakeData) -> None:
@@ -35,3 +40,11 @@ def observe_earthquake_data(data: EarthquakeData) -> None:
         source=data.source,
         epicenter=data.epicenter_location,
     ).set(data.focal_depth)
+
+    # set intensity for each area
+    for area in data.shaking_area:
+        earthquake_intensity.labels(
+            id=str(data.id),
+            source=data.source,
+            area=area.county_name.value,
+        ).set(area.area_intensity)
