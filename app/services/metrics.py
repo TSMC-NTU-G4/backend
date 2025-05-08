@@ -1,6 +1,6 @@
 from prometheus_client import Counter, Gauge
 
-from app.models.earthquake import EarthquakeData
+from app.models.earthquake import EarthquakeAlert, EarthquakeData, EarthquakeEvent
 
 # --- Earthquake data metrics ---
 earthquake_occurrences_total = Counter(
@@ -62,6 +62,7 @@ earthquake_events_severity = Gauge(
     ["source", "id", "location"],
 )
 
+
 # --- Earthquake alert metrics ---
 earthquake_alerts_total = Counter(
     "earthquake_alerts_total",
@@ -71,30 +72,18 @@ earthquake_alerts_total = Counter(
 earthquake_alerts_damage = Gauge(
     "earthquake_alerts_damage",
     "Flag of whether there is damage in earthquake alerts",
-    ["source", "id", "location"],
+    ["source", "id", "location, origin_time"],
 )
 earthquake_alerts_command_center = Gauge(
     "earthquake_alerts_command_center",
     "Flag of whether command center is needed in earthquake alerts",
-    ["source", "id", "location"],
+    ["source", "id", "location, origin_time"],
 )
 earthquake_alerts_processing_duration = Gauge(
     "earthquake_alerts_processing_duration",
     "Processing duration of earthquake alerts",
-    ["source", "id", "location"],
+    ["source", "id", "location, origin_time"],
 )
 
-# def observe_earthquake_alerts(alert: EarthquakeData) -> None:
-#     # increment alert counter
-#     earthquake_alerts_total.labels(source=alert.source).inc()
 
-#     # set damage and command center flags
-#     earthquake_alerts_damage.labels(
-#         id=str(alert.id),
-#         source=alert.source,
-#     ).set(alert.has_damage.value)
-#     earthquake_alerts_command_center.labels(
-#         id=str(alert.id),
-#         source=alert.source,
-#         epicenter=alert.epicenter_location,
-#     ).set(alert.needs_command_center.value)
+
