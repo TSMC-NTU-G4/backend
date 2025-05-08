@@ -62,6 +62,7 @@ earthquake_events_severity = Gauge(
     ["source", "id", "location"],
 )
 
+
 def observe_earthquake_events(event: EarthquakeEvent) -> None:
     # increment event counter
     earthquake_events_total.labels(source=event.source).inc()
@@ -83,17 +84,17 @@ earthquake_alerts_total = Counter(
 earthquake_alerts_damage = Gauge(
     "earthquake_alerts_damage",
     "Flag of whether there is damage in earthquake alerts",
-    ["source", "id", "location, origin_time"],
+    ["source", "id", "location", "origin_time"],
 )
 earthquake_alerts_command_center = Gauge(
     "earthquake_alerts_command_center",
     "Flag of whether command center is needed in earthquake alerts",
-    ["source", "id", "location, origin_time"],
+    ["source", "id", "location", "origin_time"],
 )
 earthquake_alerts_processing_duration = Gauge(
     "earthquake_alerts_processing_duration",
     "Processing duration of earthquake alerts",
-    ["source", "id", "location, origin_time"],
+    ["source", "id", "location", "origin_time"],
 )
 
 
@@ -126,6 +127,3 @@ def observe_earthquake_alerts(alert: EarthquakeAlert) -> None:
 def observe_earthquake_alert_report() -> None:
     # TODO: update alert's attributes : has_damage, needs_command_center, processing_duration
     pass
-
-
-

@@ -69,7 +69,7 @@ def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeAlert]:
                 severity_level=event.severity_level,
                 has_damage=TriState.UNKNOWN,
                 needs_command_center=TriState.UNKNOWN,
-                processing_furation=0,  # Add real logic later
+                processing_duration=0,  # Add real logic later
             )
             alerts.append(alert)
             redis_client.set(redis_key, alert.model_dump_json())
