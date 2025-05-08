@@ -1,11 +1,6 @@
 from prometheus_client import Counter, Gauge
 
 from app.models.earthquake import EarthquakeAlert, EarthquakeData, EarthquakeEvent
-from app.models.enums import SeverityLevel
-
-# map severity level to their index
-severity_level_dict = {level.value: i for i, level in enumerate(SeverityLevel)}
-
 
 # --- Earthquake data metrics ---
 earthquake_occurrences_total = Counter(
@@ -76,7 +71,7 @@ def observe_earthquake_events(events: list[EarthquakeEvent]) -> None:
             id=str(event.id),
             source=event.source,
             location=event.location.value,
-        ).set(severity_level_dict[event.severity_level.value])
+        ).set(event.severity_level.value)
 
 
 # --- Earthquake alert metrics ---

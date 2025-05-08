@@ -30,12 +30,7 @@ class EarthquakeEvent(BaseModel):
     severity_level: SeverityLevel
 
 
-class EarthquakeAlert(BaseModel):
-    id: str
-    source: str
-    origin_time: datetime
-    location: Location
-    severity_level: SeverityLevel
+class EarthquakeAlert(EarthquakeEvent):
     has_damage: TriState
     needs_command_center: TriState
     processing_duration: int

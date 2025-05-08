@@ -9,9 +9,9 @@ class Location(str, Enum):
 
 
 class SeverityLevel(str, Enum):
-    NA = "NA"
-    L1 = "L1"
-    L2 = "L2"
+    NA = 0
+    L1 = 1
+    L2 = 2
 
 
 class TriState(int, Enum):

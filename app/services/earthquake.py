@@ -5,9 +5,6 @@ from app.core.redis import get_alert_suppress_time, redis_client
 from app.models.earthquake import EarthquakeAlert, EarthquakeData, EarthquakeEvent
 from app.models.enums import Location, SeverityLevel, TriState
 
-# map severity level to their index
-severity_level_dict = {level.value: i for i, level in enumerate(SeverityLevel)}
-
 
 def generate_events(data: EarthquakeData) -> list[EarthquakeEvent]:
     events = []
@@ -52,10 +49,12 @@ def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeAlert]:
             )
 
             # current event should be suppressed
-            if severity_level_dict[event.severity_level.value] <= severity_level_dict[
-                cached_severity_level
-            ] and event.origin_time - cached_origin_time <= timedelta(
-                seconds=alert_suppress_time,
+            if (
+                event.severity_level.value <= cached_severity_level
+                and event.origin_time - cached_origin_time
+                <= timedelta(
+                    seconds=alert_suppress_time,
+                )
             ):
                 continue
 
