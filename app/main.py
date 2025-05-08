@@ -1,25 +1,16 @@
-import os
-
-from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.routers import earthquake
 
-# load env variables
-load_dotenv()
-
 app = FastAPI()
 Instrumentator().instrument(app).expose(app)
 
 # enable CORS related config
-origins = [
-    os.environ.get("FRONTEND_BASE_URL"),
-]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
