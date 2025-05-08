@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 
 from .base import CustomBaseModel
-from .enums import Location, SeverityLevel
+from .enums import Location, SeverityLevel, TriState
 
 
 class ShakingArea(CustomBaseModel):
@@ -36,5 +36,6 @@ class EarthquakeAlert(BaseModel):
     origin_time: datetime
     location: Location
     severity_level: SeverityLevel
-    status: str
-    processing_furation: int
+    has_damage: TriState
+    needs_command_center: TriState
+    processing_duration: int
