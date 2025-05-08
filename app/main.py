@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
+from app.models.response import Response
 from app.routers import earthquake, settings
 
 app = FastAPI()
@@ -21,5 +22,5 @@ app.include_router(settings.router)
 
 
 @app.get("/")
-def root() -> dict[str, str]:
+def root() -> Response:
     return {"message": "Welcome to the Earthquake API!"}
