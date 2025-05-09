@@ -11,3 +11,6 @@ wheels/
 
 # Environment variable files
 .env
+
+# local file system
+.DS_Store
