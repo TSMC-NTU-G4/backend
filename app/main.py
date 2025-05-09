@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.models.response import Response
-from app.routers import earthquake, settings, redis
+from app.routers import earthquake, redis, settings
 
 app = FastAPI()
 Instrumentator().instrument(app).expose(app)
