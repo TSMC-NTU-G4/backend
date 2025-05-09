@@ -7,12 +7,7 @@ uv sync --frozen --no-cache
 
 ## Configure environment
 ```bash
-cp .env.example .env  # modify values in .env accordingly
-```
-
-## Start the development server
-```bash
-uv run uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+cp .env.example .env  
 ```
 
 ## Lint and fix files
@@ -28,9 +23,10 @@ docker-compose up -d
 ```
 > ✅ Changes in `app/` are auto-reloaded.
 
-> ⚠️ For config updates (e.g. `Dockerfile`, `docker-compose.yml`), kindly restart with: 
+> ⚠️ For other updates, kindly restart with: 
 > ```bash
 > docker-compose down
+> docker-compose build  
 > docker-compose up -d
 > ```
 
@@ -58,4 +54,50 @@ docker-compose up -d
     }
     ```
   - Response
-    - Status: `204 No Content`
+    ```json
+    {
+      "message": "Created earthquake 8afe3df4-10b8-4031-acdc-3477dac40e98 successfully",
+      "data": [
+          {
+              "id": "8afe3df4-10b8-4031-acdc-3477dac40e98-Taipei",
+              "source": "Simulation",
+              "origin_time": "2025-05-09T10:13:34",
+              "location": "Taipei",
+              "severity_level": 2,
+              "has_damage": -1,
+              "needs_command_center": -1,
+              "processing_duration": 0
+          },
+          {
+              "id": "8afe3df4-10b8-4031-acdc-3477dac40e98-Hsinchu",
+              "source": "Simulation",
+              "origin_time": "2025-05-09T10:13:34",
+              "location": "Hsinchu",
+              "severity_level": 2,
+              "has_damage": -1,
+              "needs_command_center": -1,
+              "processing_duration": 0
+          },
+          {
+              "id": "8afe3df4-10b8-4031-acdc-3477dac40e98-Taichung",
+              "source": "Simulation",
+              "origin_time": "2025-05-09T10:13:34",
+              "location": "Taichung",
+              "severity_level": 2,
+              "has_damage": -1,
+              "needs_command_center": -1,
+              "processing_duration": 0
+          },
+          {
+              "id": "8afe3df4-10b8-4031-acdc-3477dac40e98-Tainan",
+              "source": "Simulation",
+              "origin_time": "2025-05-09T10:13:34",
+              "location": "Tainan",
+              "severity_level": 2,
+              "has_damage": -1,
+              "needs_command_center": -1,
+              "processing_duration": 0
+          }
+      ]
+    }
+    ```
