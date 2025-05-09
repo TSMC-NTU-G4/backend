@@ -1,0 +1,172 @@
+{
+  "id": null,
+  "title": "Earthquake Monitoring Dashboard",
+  "timezone": "UTC+8",
+  "schemaVersion": 16,
+  "version": 1,
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "graph",
+      "title": "Total Earthquake Occurrences",
+      "id": 1,
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 9
+      },
+      "targets": [
+        {
+          "expr": "earthquake_occurrences_total{}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Earthquake Magnitude",
+      "id": 2,
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 9,
+        "w": 24,
+        "h": 9
+      },
+      "targets": [
+        {
+          "expr": "earthquake_magnitude{}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Earthquake Depth",
+      "id": 3,
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 18,
+        "w": 24,
+        "h": 9
+      },
+      "targets": [
+        {
+          "expr": "earthquake_depth{}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Earthquake Intensity",
+      "id": 4,
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 27,
+        "w": 24,
+        "h": 9
+      },
+      "targets": [
+        {
+          "expr": "earthquake_intensity{}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Earthquake Event Count",
+      "id": 5,
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 36,
+        "w": 24,
+        "h": 9
+      },
+      "targets": [
+        {
+          "expr": "earthquake_events_total",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Earthquake Event Severity",
+      "id": 6,
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 45,
+        "w": 24,
+        "h": 9
+      },
+      "targets": [
+        {
+          "expr": "earthquake_event_severity_level",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Earthquake Alert Count",
+      "id": 7,
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 54,
+        "w": 24,
+        "h": 9
+      },
+      "targets": [
+        {
+          "expr": "earthquake_alerts_total",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Earthquake Alerts with Damage",
+      "id": 8,
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 63,
+        "w": 24,
+        "h": 9
+      },
+      "targets": [
+        {
+          "expr": "earthquake_alerts_damage",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Earthquake Alerts with Command Center Need",
+      "id": 9,
+      "datasource": "Prometheus",
+      "gridPos": {
+        "x": 0,
+        "y": 72,
+        "w": 24,
+        "h": 9
+      },
+      "targets": [
+        {
+          "expr": "earthquake_alerts_command_center",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}
