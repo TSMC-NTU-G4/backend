@@ -20,7 +20,7 @@ class TriState(int, Enum):
     UNKNOWN = -1
 
 
-class AlertStatus(int, Enum):
-    CLOSED = 1
-    OPEN = 0
-    AUTOCLOSED = -1
+class AlertStatus(str, Enum):
+    CLOSED = "CLOSED"
+    OPEN = "OPEN"
+    AUTOCLOSED = "AUTOCLOSED"
