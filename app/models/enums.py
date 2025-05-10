@@ -23,4 +23,4 @@ class TriState(int, Enum):
 class AlertStatus(int, Enum):
     CLOSED = 1
     OPEN = 0
-    AUTOCLOSE = -1
+    AUTOCLOSED = -1
