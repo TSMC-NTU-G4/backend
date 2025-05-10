@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from pydantic import BaseModel, Field
+from pydantic import Field
 
 from .base import CustomBaseModel
 from .enums import Location, SeverityLevel, TriState
@@ -22,7 +22,7 @@ class EarthquakeData(CustomBaseModel):
     shaking_area: list[ShakingArea] = Field(default_factory=list)
 
 
-class EarthquakeEvent(BaseModel):
+class EarthquakeEvent(CustomBaseModel):
     id: str
     source: str
     origin_time: datetime
