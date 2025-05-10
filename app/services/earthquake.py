@@ -1,7 +1,6 @@
-import json
-from datetime import datetime, timedelta
+from datetime import timedelta
 
-from app.core.redis import get_alert_suppress_time, redis_client
+from app.core.redis import get_alert_suppress_time, get_data_by_prefix, redis_client
 from app.models.earthquake import EarthquakeAlert, EarthquakeData, EarthquakeEvent
 from app.models.enums import AlertStatus, Location, SeverityLevel, TriState
 from app.services.metrics import (
@@ -42,16 +41,14 @@ def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeAlert]:
     alert_suppress_time = get_alert_suppress_time()
 
     for event in events:
-        redis_key = f"alert_{event.source}_{event.location.value}_{event.id}"
-        cached_alert = redis_client.get(redis_key)
+        redis_key = f"alert_{event.source}_{event.location.value}"
+        cached_alerts = get_data_by_prefix(redis_key, EarthquakeAlert)
+        cached_alert = max(cached_alerts, key=lambda a: a.origin_time, default=None)
 
         # found an existing alert with the same location as current event
         if cached_alert:
-            cached_alert_json = json.loads(cached_alert)
-            cached_severity_level = cached_alert_json.get("severity_level")
-            cached_origin_time = datetime.fromisoformat(
-                cached_alert_json.get("origin_time"),
-            )
+            cached_severity_level = cached_alert.severity_level
+            cached_origin_time = cached_alert.origin_time
 
             # current event should be suppressed
             if (
@@ -66,18 +63,14 @@ def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeAlert]:
         # current event should trigger an alert
         if event.severity_level != SeverityLevel.NA:
             alert = EarthquakeAlert(
-                id=f"{event.id}",
-                source=event.source,
-                origin_time=event.origin_time,
-                location=event.location,
-                severity_level=event.severity_level,
+                **event.model_dump(),
                 status=AlertStatus.OPEN,
                 has_damage=TriState.UNKNOWN,
                 needs_command_center=TriState.UNKNOWN,
                 processing_duration=0,  # Add real logic later
             )
             alerts.append(alert)
-            redis_client.set(redis_key, alert.model_dump_json())
+            redis_client.set(f"{redis_key}_{event.id}", alert.model_dump_json())
 
     return alerts
 
