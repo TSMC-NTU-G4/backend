@@ -4,6 +4,11 @@ from datetime import datetime, timedelta
 from app.core.redis import get_alert_suppress_time, redis_client
 from app.models.earthquake import EarthquakeAlert, EarthquakeData, EarthquakeEvent
 from app.models.enums import Location, SeverityLevel, TriState
+from app.services.metrics import (
+    observe_earthquake_alerts,
+    observe_earthquake_data,
+    observe_earthquake_events,
+)
 
 
 def generate_events(data: EarthquakeData) -> list[EarthquakeEvent]:
@@ -82,3 +87,17 @@ def classify_severity(magnitude: float, intensity: float) -> SeverityLevel:
     if intensity >= 1:
         return SeverityLevel.L1
     return SeverityLevel.NA
+
+
+def process_earthquake_data(data: EarthquakeData) -> list[EarthquakeAlert]:
+    # update metrics for earthquake data
+    observe_earthquake_data(data)
+
+    events = generate_events(data)
+    observe_earthquake_events(events)
+
+    # obtain alerts by filtering events
+    alerts = generate_alerts(events)
+    observe_earthquake_alerts(alerts)
+
+    return alerts
