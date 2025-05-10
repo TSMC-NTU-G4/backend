@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from app.core.redis import get_alert_suppress_time, redis_client
 from app.models.earthquake import EarthquakeAlert, EarthquakeData, EarthquakeEvent
-from app.models.enums import Location, SeverityLevel, TriState
+from app.models.enums import AlertStatus, Location, SeverityLevel, TriState
 from app.services.metrics import (
     observe_earthquake_alerts,
     observe_earthquake_data,
@@ -42,7 +42,7 @@ def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeAlert]:
     alert_suppress_time = get_alert_suppress_time()
 
     for event in events:
-        redis_key = f"alert_{event.location.value}"
+        redis_key = f"alert_{event.source}_{event.location.value}_{event.id}"
         cached_alert = redis_client.get(redis_key)
 
         # found an existing alert with the same location as current event
@@ -71,6 +71,7 @@ def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeAlert]:
                 origin_time=event.origin_time,
                 location=event.location,
                 severity_level=event.severity_level,
+                status=AlertStatus.OPEN,
                 has_damage=TriState.UNKNOWN,
                 needs_command_center=TriState.UNKNOWN,
                 processing_duration=0,  # Add real logic later
