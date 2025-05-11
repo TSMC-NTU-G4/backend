@@ -17,3 +17,9 @@ dev = [
     "pytest>=8.3.5",
     "ruff>=0.11.8",
 ]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
