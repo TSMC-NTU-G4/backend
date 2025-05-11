@@ -80,6 +80,11 @@ earthquake_alerts_total = Counter(
     "Total number of earthquake alerts",
     ["source"],
 )
+earthquake_alerts_processed_total = Counter(
+    "earthquake_alerts_processed_total",
+    "Total number of processed earthquake alerts",
+    ["source"],
+)
 earthquake_alerts_damage = Gauge(
     "earthquake_alerts_damage",
     "Flag of whether there is damage in earthquake alerts",
@@ -123,6 +128,26 @@ def observe_earthquake_alerts(alerts: list[EarthquakeAlert]) -> None:
         ).set(alert.processing_duration)
 
 
-def observe_earthquake_alert_report() -> None:
-    # TODO: update alert's attributes : has_damage, needs_command_center, processing_duration
-    pass
+def observe_earthquake_alert_report(alert: EarthquakeAlert) -> None:
+    earthquake_alerts_processed_total.labels(source=alert.source).inc()
+
+    earthquake_alerts_damage.labels(
+        id=str(alert.id),
+        source=alert.source,
+        location=alert.location.value,
+        origin_time=alert.origin_time.isoformat(),
+    ).set(alert.has_damage.value)
+
+    earthquake_alerts_command_center.labels(
+        id=str(alert.id),
+        source=alert.source,
+        location=alert.location.value,
+        origin_time=alert.origin_time.isoformat(),
+    ).set(alert.needs_command_center.value)
+
+    earthquake_alerts_processing_duration.labels(
+        id=str(alert.id),
+        source=alert.source,
+        location=alert.location.value,
+        origin_time=alert.origin_time.isoformat(),
+    ).set(alert.processing_duration.total_seconds())
