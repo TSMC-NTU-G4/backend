@@ -37,13 +37,13 @@ def generate_events(data: EarthquakeData) -> list[EarthquakeEvent]:
     return events
 
 
-def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeAlert]:
+async def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeAlert]:
     alerts = []
-    alert_suppress_time = get_alert_suppress_time()
+    alert_suppress_time = await get_alert_suppress_time()
 
     for event in events:
         redis_key = f"alert_{event.source}_{event.location.value}"
-        cached_alerts = get_data_by_prefix(redis_key, EarthquakeAlert)
+        cached_alerts = await get_data_by_prefix(redis_key, EarthquakeAlert)
         cached_alert = max(cached_alerts, key=lambda a: a.origin_time, default=None)
 
         # found an existing alert with the same location as current event
@@ -71,7 +71,7 @@ def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeAlert]:
                 processing_duration=0,  # Add real logic later
             )
             alerts.append(alert)
-            redis_client.set(f"{redis_key}_{event.id}", alert.model_dump_json())
+            await redis_client.set(f"{redis_key}_{event.id}", alert.model_dump_json())
 
     return alerts
 
@@ -84,7 +84,7 @@ def classify_severity(magnitude: float, intensity: float) -> SeverityLevel:
     return SeverityLevel.NA
 
 
-def process_earthquake_data(data: EarthquakeData) -> list[EarthquakeAlert]:
+async def process_earthquake_data(data: EarthquakeData) -> list[EarthquakeAlert]:
     # update metrics for earthquake data
     observe_earthquake_data(data)
 
@@ -92,7 +92,7 @@ def process_earthquake_data(data: EarthquakeData) -> list[EarthquakeAlert]:
     observe_earthquake_events(events)
 
     # obtain alerts by filtering events
-    alerts = generate_alerts(events)
+    alerts = await generate_alerts(events)
     observe_earthquake_alerts(alerts)
 
     return alerts

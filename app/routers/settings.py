@@ -8,8 +8,8 @@ router = APIRouter(prefix="/api/settings", tags=["settings"])
 
 
 @router.put("/alert-suppress-time")
-def set_suppress_time(data: Settings) -> Response[str]:
-    redis_client.set("ALERT_SUPPRESS_TIME", str(data.alert_suppress_time))
+async def set_suppress_time(data: Settings) -> Response[str]:
+    await redis_client.set("ALERT_SUPPRESS_TIME", str(data.alert_suppress_time))
     return {
         "message": f"Updated to {data.alert_suppress_time} seconds successfully",
         "data": f"{data.alert_suppress_time}",
@@ -17,8 +17,8 @@ def set_suppress_time(data: Settings) -> Response[str]:
 
 
 @router.get("/alert-suppress-time")
-def get_suppress_time() -> Response[str]:
-    time = get_alert_suppress_time()
+async def get_suppress_time() -> Response[str]:
+    time = await get_alert_suppress_time()
     return {
         "message": f"The current suppress time is {time} seconds",
         "data": f"{time}",

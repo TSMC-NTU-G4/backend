@@ -10,14 +10,14 @@ router = APIRouter(prefix="/api/earthquake", tags=["earthquake"])
 
 
 @router.post("/")
-def create_earthquake(data: EarthquakeData) -> Response:
-    process_earthquake_data(data)
+async def create_earthquake(data: EarthquakeData) -> Response:
+    await process_earthquake_data(data)
     return {"message": f"Created earthquake {data.id} successfully"}
 
 
 @router.get("/alerts")
-def get_earthquake_alerts() -> Response[list[EarthquakeAlert]]:
-    alerts = get_data_by_prefix("alert", EarthquakeAlert)
+async def get_earthquake_alerts() -> Response[list[EarthquakeAlert]]:
+    alerts = await get_data_by_prefix("alert", EarthquakeAlert)
     alerts.sort(
         key=lambda alert: (
             -alert.origin_time.timestamp(),
@@ -32,10 +32,10 @@ def get_earthquake_alerts() -> Response[list[EarthquakeAlert]]:
 
 
 @router.put("/alerts/{alert_id}")
-def process_earthquake_alert(alert_id: str, alert: EarthquakeAlert) -> Response:
+async def process_earthquake_alert(alert_id: str, alert: EarthquakeAlert) -> Response:
     # determine if processed alert is still in redis cache
     redis_key = f"alert_{alert.source}_{alert.location.value}_{alert_id}"
-    cached_alert = redis_client.get(redis_key)
+    cached_alert = await redis_client.get(redis_key)
     if not cached_alert:
         raise HTTPException(status_code=404, detail="Alert not found")
 
@@ -46,5 +46,5 @@ def process_earthquake_alert(alert_id: str, alert: EarthquakeAlert) -> Response:
     update_alert_metrics(alert)
 
     # delete alert from redis
-    redis_client.delete(redis_key)
+    await redis_client.delete(redis_key)
     return {"message": f"Processed alert {alert_id} successfully"}

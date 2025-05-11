@@ -7,6 +7,6 @@ router = APIRouter(prefix="/api/redis", tags=["redis"])
 
 
 @router.delete("/")
-def clear_cache() -> Response:
-    redis_client.flushdb()
+async def clear_cache() -> Response:
+    await redis_client.flushdb()
     return {"message": "Clear redis cache successfully"}
