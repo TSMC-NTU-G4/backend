@@ -14,3 +14,4 @@ wheels/
 
 # local file system
 .DS_Store
+.coverage
