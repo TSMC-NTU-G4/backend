@@ -34,4 +34,5 @@ class EarthquakeAlert(EarthquakeEvent):
     status: AlertStatus
     has_damage: TriState
     needs_command_center: TriState
+    processed_time: datetime | None = None
     processing_duration: int
