@@ -1,3 +1,7 @@
+import json
+from datetime import datetime, timedelta
+
+import pytz
 from fastapi import APIRouter, HTTPException
 
 from app.core.redis import get_data_by_prefix, redis_client
@@ -48,3 +52,42 @@ async def process_earthquake_alert(alert_id: str, alert: EarthquakeAlert) -> Res
     # delete alert from redis
     await redis_client.delete(redis_key)
     return {"message": f"Processed alert {alert_id} successfully"}
+
+
+@router.delete("/alerts/autoclose")
+async def autoclose_expired_alerts() -> Response:
+    # fetch all alerts from redis
+    alerts = await get_data_by_prefix("alert", EarthquakeAlert)
+    taipei_tz = pytz.timezone("Asia/Taipei")
+    now = datetime.now(taipei_tz)
+    expired_count = 0
+
+    for alert in alerts:
+        # ensure alert origin time includes timezone info
+        if alert.origin_time.tzinfo is None:
+            alert.origin_time = taipei_tz.localize(alert.origin_time)
+
+        # current alert is not responded within 1 hr
+        if alert.status == AlertStatus.OPEN and (now - alert.origin_time) > timedelta(
+            minutes=1,
+        ):
+            # set alert status as autoclosed
+            alert.status = AlertStatus.AUTOCLOSED
+            expired_count += 1
+
+            # TODO: update alert metrics
+
+            # remove alert from redis
+            await redis_client.delete(
+                f"alert_{alert.source}_{alert.location.value}_{alert.id}",
+            )
+
+            # publish alert to redis channel
+            await redis_client.publish(
+                "alerts",
+                json.dumps(
+                    {"type": AlertStatus.AUTOCLOSED, "alert": alert.model_dump_json()},
+                ),
+            )
+
+    return {"message": f"Auto-closed {expired_count} expired alerts."}
