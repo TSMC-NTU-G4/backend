@@ -2,9 +2,9 @@ import json
 import os
 from typing import TypeVar
 
-from redis.asyncio import Redis
 from dotenv import load_dotenv
 from pydantic import BaseModel, ValidationError
+from redis.asyncio import Redis
 
 T = TypeVar("T", bound=BaseModel)
 
