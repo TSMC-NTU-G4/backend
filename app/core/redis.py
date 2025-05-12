@@ -10,9 +10,9 @@ T = TypeVar("T", bound=BaseModel)
 
 # load env variables
 load_dotenv()
-REDIS_HOST = os.getenv("REDIS_HOST")
-REDIS_PORT = int(os.getenv("REDIS_PORT"))
-ALERT_SUPPRESS_TIME = int(os.getenv("ALERT_SUPPRESS_TIME"))
+REDIS_HOST = os.getenv("REDIS_HOST", "redis")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+ALERT_SUPPRESS_TIME = int(os.getenv("ALERT_SUPPRESS_TIME", "600"))
 
 
 # initialize redis connection
