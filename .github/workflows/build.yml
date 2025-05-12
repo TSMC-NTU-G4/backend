@@ -38,4 +38,6 @@ jobs:
         run: uv run ruff check .
       
       - name: Run tests
-        run: uv run pytest -v 
+        run: |
+          cp .env.example .env
+          uv run pytest -v 
