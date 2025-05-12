@@ -6,6 +6,7 @@ from app.models.enums import AlertStatus, Location, SeverityLevel, TriState
 from app.services.metrics import (
     observe_earthquake_alert_report,
     observe_earthquake_alerts,
+    observe_earthquake_alerts_autoclose,
     observe_earthquake_data,
     observe_earthquake_events,
 )
@@ -100,3 +101,7 @@ async def process_earthquake_data(data: EarthquakeData) -> list[EarthquakeAlert]
 
 def update_alert_metrics(alert: EarthquakeAlert) -> None:
     observe_earthquake_alert_report(alert)
+
+
+def update_alert_autoclose_metrics(alert: EarthquakeAlert) -> None:
+    observe_earthquake_alerts_autoclose(alert)

@@ -85,6 +85,11 @@ earthquake_alerts_processed_total = Counter(
     "Total number of processed earthquake alerts",
     ["source"],
 )
+earthquake_alerts_autoclosed_total = Counter(
+    "earthquake_alerts_autoclosed_total",
+    "Total number of autoclosed earthquake alerts",
+    ["source"],
+)
 earthquake_alerts_damage = Gauge(
     "earthquake_alerts_damage",
     "Flag of whether there is damage in earthquake alerts",
@@ -151,3 +156,7 @@ def observe_earthquake_alert_report(alert: EarthquakeAlert) -> None:
         location=alert.location.value,
         origin_time=alert.origin_time.isoformat(),
     ).set(alert.processing_duration.total_seconds())
+
+
+def observe_earthquake_alerts_autoclose(alert: EarthquakeAlert) -> None:
+    earthquake_alerts_autoclosed_total.labels(source=alert.source).inc()

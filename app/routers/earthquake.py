@@ -8,7 +8,11 @@ from app.core.redis import get_data_by_prefix, redis_client
 from app.models.earthquake import EarthquakeAlert, EarthquakeData
 from app.models.enums import AlertStatus
 from app.models.response import Response
-from app.services.earthquake import process_earthquake_data, update_alert_metrics
+from app.services.earthquake import (
+    process_earthquake_data,
+    update_alert_autoclose_metrics,
+    update_alert_metrics,
+)
 
 router = APIRouter(prefix="/api/earthquake", tags=["earthquake"])
 
@@ -75,7 +79,8 @@ async def autoclose_expired_alerts() -> Response:
             alert.status = AlertStatus.AUTOCLOSED
             expired_count += 1
 
-            # TODO: update alert metrics
+            # update alert metrics
+            update_alert_autoclose_metrics(alert)
 
             # remove alert from redis
             await redis_client.delete(
