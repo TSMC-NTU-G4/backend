@@ -38,4 +38,6 @@ jobs:
         run: uv run ruff check .
       
       - name: Run tests
-        run: uv run pytest -v tests/
+        run: |
+          cd $GITHUB_WORKSPACE
+          uv run pytest -v tests/
