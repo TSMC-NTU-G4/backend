@@ -21,7 +21,7 @@ async def fetch_earthquake_data(earthquake_server_url: str):
                         data = json.loads(message)
                         # await earthquake_manager.broadcast(data)
                         # print the data
-                        # print(data)
+                        print(data)
                         
                     except json.JSONDecodeError:
                         # Handle malformed JSON
@@ -50,4 +50,5 @@ def start_earthquake_fetcher(server_url: str):
     """Start the task to fetch earthquake data."""
     global earthquake_fetcher_task
     if earthquake_fetcher_task is None or earthquake_fetcher_task.done():
+        print(f"Starting earthquake data fetcher with URL: {server_url}")
         earthquake_fetcher_task = asyncio.create_task(fetch_earthquake_data(server_url)) 
