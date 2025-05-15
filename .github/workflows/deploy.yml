@@ -1,0 +1,59 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: 
+      - Build
+    branches: main
+    types: 
+      - completed
+
+env:
+  REGION_NAME: asia-east1-docker.pkg.dev
+  REPO_NAME: app-images
+  IMAGE_NAME: backend
+  PROJECT_ID: tsmc-ntu-g4
+
+jobs:
+  shortsha:
+    runs-on: ubuntu-latest
+    outputs:
+      shortsha: ${{ steps.extract-sha.outputs.shortsha }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract short SHA
+        id: extract-sha
+        run: echo "shortsha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+  push-image:
+    runs-on: ubuntu-latest
+    needs: shortsha
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2.1.10
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2.1.4
+
+      - name: Configure Docker client
+        run: gcloud auth configure-docker ${{ env.REGION_NAME }}
+
+      - name: Build image
+        run: |
+          echo "Short SHA: ${{ needs.shortsha.outputs.shortsha }}"
+          docker build -t "${REGION_NAME}/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:${{ needs.shortsha.outputs.shortsha }}" \
+                       -t "${REGION_NAME}/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:latest" .
+
+      - name: Push image
+        run: |
+          docker push "${REGION_NAME}/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:${{ needs.shortsha.outputs.shortsha }}"
+          docker push "${REGION_NAME}/${PROJECT_ID}/${REPO_NAME}/${IMAGE_NAME}:latest"
