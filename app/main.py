@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
+from app.core.redis import check_redis_connection
 from app.core.redis_listener import listen_to_alerts
 from app.models.response import Response
 from app.routers import earthquake, redis, settings
@@ -38,3 +39,20 @@ async def startup_event() -> None:
 @app.get("/")
 def root() -> Response:
     return {"message": "Welcome to the Earthquake API!"}
+
+
+@app.get("/health")
+async def health_check() -> Response:
+    redis_ok = await check_redis_connection()
+
+    # TODO: check for prometheus and grafana status
+
+    overall_status = all([redis_ok])
+    return {
+        "message": "All services are healthy"
+        if overall_status
+        else "Some services are unhealthy",
+        "data": {
+            "redis": "healthy" if redis_ok else "unhealthy",
+        },
+    }

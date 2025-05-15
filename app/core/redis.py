@@ -19,6 +19,13 @@ ALERT_SUPPRESS_TIME = int(os.getenv("ALERT_SUPPRESS_TIME", "600"))
 redis_client = Redis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 
 
+async def check_redis_connection() -> bool:
+    try:
+        return await redis_client.ping()
+    except Exception:
+        return False
+
+
 async def get_alert_suppress_time() -> int:
     # get alert suppress time from cache
     # return default time from env if not found in cache
