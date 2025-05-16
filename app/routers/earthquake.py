@@ -73,7 +73,7 @@ async def autoclose_expired_alerts() -> Response:
 
         # current alert is not responded within 1 hr
         if alert.status == AlertStatus.OPEN and (now - alert.origin_time) > timedelta(
-            minutes=1,
+            hours=1,
         ):
             # set alert status as autoclosed
             alert.status = AlertStatus.AUTOCLOSED
