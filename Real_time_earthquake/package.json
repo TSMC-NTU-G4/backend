@@ -1,0 +1,16 @@
+{
+  "name": "earthquake-monitor-tools",
+  "version": "1.0.0",
+  "description": "Tools for real-time earthquake monitoring",
+  "main": "subscribe-data.js",
+  "dependencies": {
+    "ws": "^8.13.0",
+    "uuid": "^9.0.0"
+  },
+  "scripts": {
+    "start": "node subscribe-data.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 

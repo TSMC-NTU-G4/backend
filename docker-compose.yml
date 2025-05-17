@@ -18,6 +18,17 @@ services:
     env_file:
       - .env
   
+  earthquake_service:
+    build: ./Real_time_earthquake
+    container_name: earthquake_service
+    ports:
+      - "2487:2487"
+    networks:
+      - monitor-network
+    environment:
+      - NODE_ENV=production
+      - WS_PORT=2487
+  
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
