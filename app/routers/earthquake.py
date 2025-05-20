@@ -1,6 +1,6 @@
 import json
-from datetime import datetime, timedelta, timezone
 import uuid
+from datetime import UTC, datetime, timedelta
 
 import pytz
 from fastapi import APIRouter, HTTPException
@@ -20,12 +20,12 @@ router = APIRouter(prefix="/api/earthquake", tags=["earthquake"])
 
 # This should ideally be imported from a central config or the module providing fetch_realtime_data
 TARGET_AREAS_CONFIG_FOR_ROUTER = [
-    {'code': 106, 'name': '臺北市大安區'},
-    {'code': 402, 'name': '臺中市南區'},
-    {'code': 710, 'name': '臺南市永康區'},
-    {'code': 301, 'name': '新竹市東區'}
+    {"code": 106, "name": "臺北市大安區"},
+    {"code": 402, "name": "臺中市南區"},
+    {"code": 710, "name": "臺南市永康區"},
+    {"code": 301, "name": "新竹市東區"},
 ]
-TARGET_AREAS_NAME_TO_CODE_MAP_FOR_ROUTER = {area['name']: area['code'] for area in TARGET_AREAS_CONFIG_FOR_ROUTER}
+TARGET_AREAS_NAME_TO_CODE_MAP_FOR_ROUTER = {area["name"]: area["code"] for area in TARGET_AREAS_CONFIG_FOR_ROUTER}
 
 
 @router.post("/")
@@ -112,20 +112,20 @@ async def autoclose_expired_alerts() -> Response:
 @router.get("/realtime")
 async def get_realtime_earthquake_data() -> Response:
     area_statuses = await fetch_realtime_data() # This is the list of dicts from terminal log
-    print(area_statuses)
+
     if not area_statuses:
         # Return a default structure or an appropriate message if no data
         return {
             "message": "No realtime earthquake data available at the moment.",
             "data": {
-                'id': str(uuid.uuid4()),
-                'source': "TREM-Lite",
-                'origin_time': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z',
-                'epicenter_location': "Unknown",
-                'magnitude_value': 0.0,
-                'focal_depth': 0,
-                'shaking_area': []
-            }
+                "id": str(uuid.uuid4()),
+                "source": "TREM-Lite",
+                "origin_time": datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z",
+                "epicenter_location": "Unknown",
+                "magnitude_value": 0.0,
+                "focal_depth": 0,
+                "shaking_area": [],
+            },
         }
 
     # Determine origin_time from the most recent lastUpdate, default to first area's update or now
@@ -133,50 +133,50 @@ async def get_realtime_earthquake_data() -> Response:
     latest_update_time = None
 
     for status_item in area_statuses:
-        if status_item.get('lastUpdate'):
-            current_item_update_time = status_item['lastUpdate']
+        if status_item.get("lastUpdate"):
+            current_item_update_time = status_item["lastUpdate"]
             if latest_update_time is None or current_item_update_time > latest_update_time:
                 latest_update_time = current_item_update_time
-    
+
     origin_datetime_obj = latest_update_time
 
     if origin_datetime_obj:
         # Ensure datetime is timezone-aware (assume UTC if naive)
         if origin_datetime_obj.tzinfo is None:
-            origin_datetime_obj = origin_datetime_obj.replace(tzinfo=timezone.utc)
+            origin_datetime_obj = origin_datetime_obj.replace(tzinfo=UTC)
         else:
-            origin_datetime_obj = origin_datetime_obj.astimezone(timezone.utc)
-        origin_time_str = origin_datetime_obj.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+            origin_datetime_obj = origin_datetime_obj.astimezone(UTC)
+        origin_time_str = origin_datetime_obj.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
     else:
-        origin_time_str = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
+        origin_time_str = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
 
     # Determine magnitude_value (e.g., from the first area, assuming it's a unified value)
-    magnitude_value = 0.0
+    magnitude_str = area_statuses[0].get("magnitude", "0.0")
+    try:
+        magnitude_value = float(magnitude_str)
+    except ValueError:
+        magnitude_value = 0.0
 
     shaking_area_list = []
     for area_data in area_statuses:
-        area_name = area_data.get('name')
+        area_name = area_data.get("name")
         area_code = TARGET_AREAS_NAME_TO_CODE_MAP_FOR_ROUTER.get(area_name)
 
         if area_code is not None:
-            intensity = float(area_data.get('intensity_text', 0))
-            if intensity < 0:
-                intensity = 0
-        
             shaking_area_list.append({
-                'county_name': {'name': area_name, 'code': area_code},
-                'area_intensity': intensity,
-                'pga': area_data.get('pga', 0.0)
+                "county_name": {"name": area_name, "code": area_code},
+                "area_intensity": area_data.get("intensity", 0), # Use integer intensity from data
+                "pga": area_data.get("pga", 0.0),
             })
 
     formatted_data = {
-        'id': str(uuid.uuid4()),
-        'source': "TREM-Lite",
-        'origin_time': origin_time_str,
-        'epicenter_location': "Unknown", # As per original JS and image
-        'magnitude_value': magnitude_value,
-        'focal_depth': 0, # As per original JS and image
-        'shaking_area': shaking_area_list
+        "id": str(uuid.uuid4()),
+        "source": "TREM-Lite",
+        "origin_time": origin_time_str,
+        "epicenter_location": "Unknown", # As per original JS and image
+        "magnitude_value": magnitude_value,
+        "focal_depth": 0, # As per original JS and image
+        "shaking_area": shaking_area_list,
     }
-    
+
     return {"message": "Realtime earthquake data fetched successfully", "data": formatted_data}
