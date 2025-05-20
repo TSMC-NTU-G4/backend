@@ -9,12 +9,12 @@ from app.core.redis import get_data_by_prefix, redis_client
 from app.models.earthquake import EarthquakeAlert, EarthquakeData
 from app.models.enums import AlertStatus
 from app.models.response import Response
-from app.routers.realtime_data_handler import fetch_realtime_data
 from app.services.earthquake import (
     process_earthquake_data,
     update_alert_autoclose_metrics,
     update_alert_metrics,
 )
+from app.utils.realtime_data_handler import fetch_realtime_data
 
 router = APIRouter(prefix="/api/earthquake", tags=["earthquake"])
 
