@@ -22,7 +22,7 @@
   "links": [],
   "panels": [
     {
-      "collapsed": false,
+      "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -30,268 +30,6 @@
         "y": 0
       },
       "id": 6,
-      "panels": [],
-      "title": "Taipei",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [
-            {
-              "options": {
-                "1": {
-                  "color": "dark-red",
-                  "index": 1,
-                  "text": "⚠️"
-                },
-                "-1": {
-                  "color": "dark-green",
-                  "index": 0,
-                  "text": "✅No need"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 10,
-        "x": 0,
-        "y": 1
-      },
-      "id": 4,
-      "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto",
-        "text": {}
-      },
-      "pluginVersion": "11.5.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "earthquake_alerts_command_center{location=\"Taipei\"}",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "{{origin_time}}",
-          "range": true,
-          "refId": "A",
-          "useBackend": false
-        }
-      ],
-      "title": "Command_Center",
-      "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-GrYlRd"
-          },
-          "mappings": [],
-          "max": 10,
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 4,
-        "x": 10,
-        "y": 1
-      },
-      "id": 5,
-      "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
-      },
-      "pluginVersion": "11.5.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "earthquake_intensity{area=\"Taipei\"}",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "Intensity",
-          "range": true,
-          "refId": "A",
-          "useBackend": false
-        }
-      ],
-      "title": "Intensity",
-      "type": "gauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [
-            {
-              "options": {
-                "1": {
-                  "color": "dark-red",
-                  "index": 1,
-                  "text": "⚠️"
-                },
-                "-1": {
-                  "color": "dark-green",
-                  "index": 0,
-                  "text": "✅No Damage"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 9,
-        "x": 14,
-        "y": 1
-      },
-      "id": 7,
-      "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
-      },
-      "pluginVersion": "11.5.2",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "earthquake_alerts_damage{location=\"Taipei\"}",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "{{origin_time}}",
-          "range": true,
-          "refId": "A",
-          "useBackend": false
-        }
-      ],
-      "title": "Damages",
-      "type": "gauge"
-    },
-    {
-      "collapsed": true,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 8
-      },
-      "id": 8,
       "panels": [
         {
           "datasource": {
@@ -301,7 +39,174 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "mode": "continuous-GrYlRd"
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "0": {
+                      "color": "dark-green",
+                      "index": 0,
+                      "text": "✅No need"
+                    },
+                    "1": {
+                      "color": "dark-red",
+                      "index": 1,
+                      "text": "⚠️"
+                    },
+                    "-1": {
+                      "color": "yellow",
+                      "index": 2,
+                      "text": "❓"
+                    }
+                  },
+                  "type": "value"
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 10,
+            "x": 0,
+            "y": 1
+          },
+          "id": 4,
+          "options": {
+            "minVizHeight": 75,
+            "minVizWidth": 75,
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true,
+            "sizing": "auto",
+            "text": {}
+          },
+          "pluginVersion": "11.5.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "dem0vb3rbpy4gc"
+              },
+              "disableTextWrap": false,
+              "editorMode": "builder",
+              "expr": "earthquake_alerts_command_center{location=\"Taipei\"}",
+              "fullMetaSearch": false,
+              "hide": false,
+              "includeNullMetadata": true,
+              "instant": false,
+              "legendFormat": "{{origin_time}}",
+              "range": true,
+              "refId": "A",
+              "useBackend": false
+            }
+          ],
+          "title": "Command_Center",
+          "type": "gauge"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "dem0vb3rbpy4gc"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "continuous-GrYlRd"
+              },
+              "mappings": [],
+              "max": 10,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 4,
+            "x": 10,
+            "y": 1
+          },
+          "id": 5,
+          "options": {
+            "minVizHeight": 75,
+            "minVizWidth": 75,
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true,
+            "sizing": "auto"
+          },
+          "pluginVersion": "11.5.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "dem0vb3rbpy4gc"
+              },
+              "disableTextWrap": false,
+              "editorMode": "builder",
+              "expr": "earthquake_intensity{area=\"Taipei\"}",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": false,
+              "legendFormat": "Intensity",
+              "range": true,
+              "refId": "A",
+              "useBackend": false
+            }
+          ],
+          "title": "Intensity",
+          "type": "gauge"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "dem0vb3rbpy4gc"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "continuous-GrYlRd"
               },
               "mappings": [
                 {
@@ -314,7 +219,113 @@
                     "-1": {
                       "color": "dark-green",
                       "index": 0,
+                      "text": "✅No Damage"
+                    }
+                  },
+                  "type": "value"
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 9,
+            "x": 14,
+            "y": 1
+          },
+          "id": 7,
+          "options": {
+            "minVizHeight": 75,
+            "minVizWidth": 75,
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true,
+            "sizing": "auto"
+          },
+          "pluginVersion": "11.5.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "dem0vb3rbpy4gc"
+              },
+              "disableTextWrap": false,
+              "editorMode": "builder",
+              "expr": "earthquake_alerts_damage{location=\"Taipei\"}",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": false,
+              "legendFormat": "{{origin_time}}",
+              "range": true,
+              "refId": "A",
+              "useBackend": false
+            }
+          ],
+          "title": "Damages",
+          "type": "gauge"
+        }
+      ],
+      "title": "Taipei",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 8,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "dem0vb3rbpy4gc"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "continuous-GrYlRd"
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "0": {
+                      "color": "dark-green",
+                      "index": 0,
                       "text": "✅No need"
+                    },
+                    "1": {
+                      "color": "dark-red",
+                      "index": 1,
+                      "text": "⚠️"
+                    },
+                    "-1": {
+                      "color": "yellow",
+                      "index": 2,
+                      "text": "❓"
                     }
                   },
                   "type": "value"
@@ -463,7 +474,7 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "mode": "continuous-GrYlRd"
               },
               "mappings": [
                 {
@@ -552,7 +563,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 2
       },
       "id": 9,
       "panels": [
@@ -564,20 +575,25 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "mode": "continuous-GrYlRd"
               },
               "mappings": [
                 {
                   "options": {
+                    "0": {
+                      "color": "dark-green",
+                      "index": 0,
+                      "text": "✅No need"
+                    },
                     "1": {
                       "color": "dark-red",
                       "index": 1,
                       "text": "⚠️"
                     },
                     "-1": {
-                      "color": "dark-green",
-                      "index": 0,
-                      "text": "✅No need"
+                      "color": "yellow",
+                      "index": 2,
+                      "text": "❓"
                     }
                   },
                   "type": "value"
@@ -603,7 +619,7 @@
             "h": 7,
             "w": 10,
             "x": 0,
-            "y": 17
+            "y": 3
           },
           "id": 14,
           "options": {
@@ -678,7 +694,7 @@
             "h": 7,
             "w": 4,
             "x": 10,
-            "y": 17
+            "y": 3
           },
           "id": 15,
           "options": {
@@ -726,7 +742,7 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "mode": "continuous-GrYlRd"
               },
               "mappings": [
                 {
@@ -765,7 +781,7 @@
             "h": 7,
             "w": 9,
             "x": 14,
-            "y": 17
+            "y": 3
           },
           "id": 16,
           "options": {
@@ -815,7 +831,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 10
+        "y": 3
       },
       "id": 10,
       "panels": [],
@@ -830,20 +846,25 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-GrYlRd"
           },
           "mappings": [
             {
               "options": {
+                "0": {
+                  "color": "dark-green",
+                  "index": 2,
+                  "text": "✅No need"
+                },
                 "1": {
                   "color": "dark-red",
                   "index": 1,
                   "text": "⚠️"
                 },
                 "-1": {
-                  "color": "dark-green",
+                  "color": "yellow",
                   "index": 0,
-                  "text": "✅No need"
+                  "text": "❓"
                 }
               },
               "type": "value"
@@ -869,7 +890,7 @@
         "h": 7,
         "w": 10,
         "x": 0,
-        "y": 11
+        "y": 4
       },
       "id": 17,
       "options": {
@@ -944,7 +965,7 @@
         "h": 7,
         "w": 4,
         "x": 10,
-        "y": 11
+        "y": 4
       },
       "id": 18,
       "options": {
@@ -992,7 +1013,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-GrYlRd"
           },
           "mappings": [
             {
@@ -1031,7 +1052,7 @@
         "h": 7,
         "w": 9,
         "x": 14,
-        "y": 11
+        "y": 4
       },
       "id": 19,
       "options": {
@@ -1087,6 +1108,6 @@
   "timezone": "browser",
   "title": "Factory",
   "uid": "cemclrcci3i0wf",
-  "version": 29,
+  "version": 39,
   "weekStart": ""
 }
