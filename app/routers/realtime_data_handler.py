@@ -317,7 +317,7 @@ async def fetch_realtime_data() -> list[dict[str, Any]]:
     """Fetches real-time data and returns a list of area statuses."""
     global last_fetch_time, request_counter, area_status
 
-    now = time.time() * 1000 # Current time in milliseconds
+    now = time.time() * 1000  # Current time in milliseconds
 
     # This condition was part of the original script but might not be desired for an API endpoint
     # if now - last_fetch_time < CONFIG['interval']:
@@ -339,12 +339,14 @@ async def fetch_realtime_data() -> list[dict[str, Any]]:
                 rts_data = None
 
             if rts_data:
-                await process_target_area_data(rts_data) # This updates global area_status
+                await process_target_area_data(
+                    rts_data,
+                )  # This updates global area_status
 
         # Always return the current state of area_status after attempting to fetch/process
         return [area_status[area_cfg["code"]] for area_cfg in CONFIG["targetAreas"]]
 
-    except Exception: # Catch any other unexpected error during fetch/process
+    except Exception:  # Catch any other unexpected error during fetch/process
         # In case of error, return the last known status or an empty list if never populated.
         # This ensures the API endpoint still returns data in the expected format.
         # Consider logging the exception here.
@@ -352,7 +354,3 @@ async def fetch_realtime_data() -> list[dict[str, Any]]:
         if area_status:
             return [area_status[area_cfg["code"]] for area_cfg in CONFIG["targetAreas"]]
         return []
-
-
-
-
