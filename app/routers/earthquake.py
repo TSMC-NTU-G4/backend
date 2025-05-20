@@ -145,10 +145,10 @@ async def get_realtime_earthquake_data() -> Response:
                 latest_update_time = current_item_update_time
 
     origin_datetime_obj = latest_update_time
-
+    taipei_tz = pytz.timezone("Asia/Taipei")
+    
     if origin_datetime_obj:
         # Ensure datetime is timezone-aware (assume UTC if naive, then convert to Taipei)
-        taipei_tz = pytz.timezone("Asia/Taipei")
         if origin_datetime_obj.tzinfo is None:
             # If naive, assume it's UTC, then convert to Taipei
             origin_datetime_obj = origin_datetime_obj.replace(tzinfo=UTC).astimezone(
@@ -160,7 +160,6 @@ async def get_realtime_earthquake_data() -> Response:
         origin_time_str = origin_datetime_obj.isoformat()
     else:
         # If no specific update time, use current time in Taipei timezone
-        taipei_tz = pytz.timezone("Asia/Taipei")
         origin_time_str = datetime.now(taipei_tz).isoformat()
 
     # Determine magnitude_value (e.g., from the first area, assuming it's a unified value)
