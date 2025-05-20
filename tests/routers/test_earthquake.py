@@ -1,16 +1,16 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
-from fastapi.testclient import TestClient
+from httpx import AsyncClient
 
+from app.main import app
 from app.models.response import Response as APIResponse
 
 
-@patch("app.routers.earthquake.process_earthquake_data")
-def test_create_earthquake(
-    mock_process: MagicMock,
-    client: TestClient,
-) -> None:
-    earthquake_payload = {
+@patch("app.routers.earthquake.process_earthquake_data", new_callable=AsyncMock)
+async def test_create_earthquake(mock_process: AsyncMock) -> None:
+    mock_process.return_value = []
+
+    payload = {
         "source": "test",
         "origin_time": "2024-01-01T12:00:00Z",
         "epicenter_location": "Taipei",
@@ -18,10 +18,11 @@ def test_create_earthquake(
         "focal_depth": 4.0,
         "shaking_area": [],
     }
-    response = client.post("/api/earthquake/", json=earthquake_payload)
-    assert response.status_code == 200
 
+    async with AsyncClient(app=app, base_url="http://test") as client:
+        response = await client.post("/api/earthquake/", json=payload)
+
+    assert response.status_code == 200
     parsed = APIResponse(**response.json())
     assert "Created earthquake" in parsed.message
-
-    mock_process.assert_called_once()
+    mock_process.assert_awaited_once()
