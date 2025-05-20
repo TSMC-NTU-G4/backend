@@ -173,13 +173,13 @@ async def get_realtime_earthquake_data() -> Response:
         area_code = TARGET_AREAS_NAME_TO_CODE_MAP_FOR_ROUTER.get(area_name)
 
         if area_code is not None:
+            intensity = float(area_data.get("intensity_text", "0"))
+            if intensity < 0:
+                intensity = 0
             shaking_area_list.append(
                 {
                     "county_name": {"name": area_name, "code": area_code},
-                    "area_intensity": area_data.get(
-                        "intensity",
-                        0,
-                    ),  # Use integer intensity from data
+                    "area_intensity": intensity,
                     "pga": area_data.get("pga", 0.0),
                 },
             )
