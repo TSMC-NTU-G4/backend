@@ -177,7 +177,8 @@ async def get_realtime_earthquake_data() -> Response:
                 {
                     "county_name": {"name": area_name, "code": area_code},
                     "area_intensity": area_data.get(
-                        "intensity", 0,
+                        "intensity",
+                        0,
                     ),  # Use integer intensity from data
                     "pga": area_data.get("pga", 0.0),
                 },
