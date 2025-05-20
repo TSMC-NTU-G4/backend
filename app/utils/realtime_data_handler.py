@@ -5,6 +5,8 @@ from typing import Any
 
 import httpx
 
+from app.models.enums import Location
+
 # Configuration parameters (translated from JS CONFIG)
 CONFIG: dict[str, Any] = {
     # Subscription interval (milliseconds)
@@ -29,10 +31,10 @@ CONFIG: dict[str, Any] = {
     },
     # Target monitoring areas
     "targetAreas": [
-        {"code": 106, "name": "臺北市大安區"},
-        {"code": 402, "name": "臺中市南區"},
-        {"code": 710, "name": "臺南市永康區"},
-        {"code": 301, "name": "新竹市東區"},
+        {"code": 106, "name": Location.TAIPEI},
+        {"code": 402, "name": Location.TAICHUNG},
+        {"code": 710, "name": Location.TAINAN},
+        {"code": 301, "name": Location.HSINCHU},
     ],
     # Display intensity threshold (0 means always display)
     "displayThreshold": 0,
