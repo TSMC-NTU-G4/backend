@@ -1,5 +1,4 @@
 import datetime
-import math
 import random
 import time
 from typing import Any
@@ -39,18 +38,17 @@ CONFIG: dict[str, Any] = {
     "displayThreshold": 0,
 }
 
-# Intensity scale text representation (from JS INTENSITY_LIST)
-INTENSITY_LIST: list[str] = ["0", "1", "2", "3", "4", "5⁻", "5⁺", "6⁻", "6⁺", "7"]
+# Intensity scale text representation (from JS INTENSITY_LIST) - REMOVED as unused
+# INTENSITY_LIST: list[str] = ["0", "1", "2", "3", "4", "5⁻", "5⁺", "6⁻", "6⁺", "7"]
 
 # Global state variables
-last_fetch_time: float = 0.0
 request_counter: int = 0
 is_offline: bool = False
 area_status: dict[int, dict[str, Any]] = {}
 station_info: dict[str, Any] | None = None
 last_station_info_fetch: float = 0.0
 STATION_INFO_INTERVAL: int = 5 * 60 * 1000  # 5 minutes in milliseconds
-unified_magnitude: float = 0.0
+# unified_magnitude: float = 0.0 - REMOVED as unused
 
 # Initialize status for each target area
 for area in CONFIG["targetAreas"]:
@@ -62,86 +60,6 @@ for area in CONFIG["targetAreas"]:
         "magnitude": "0.0",
         "lastUpdate": None,
     }
-
-
-class IntensityCalculator:
-    """Utility functions for intensity calculation."""
-
-    @staticmethod
-    def pga_to_float(pga: float) -> float:
-        """Converts PGA (gal) to float intensity."""
-        if pga <= 0:
-            return -3.0  # Avoid math domain error for log(0) or log(<0)
-        return 2 * (math.log(pga) / math.log(10)) + 0.7
-
-    @staticmethod
-    def pga_to_intensity(pga: float) -> int:
-        """Converts PGA (gal) to integer intensity (0-9)."""
-        return IntensityCalculator.intensity_float_to_int(
-            IntensityCalculator.pga_to_float(pga),
-        )
-
-    @staticmethod
-    def intensity_float_to_int(float_value: float) -> int:
-        """Converts float intensity to integer intensity (0-9)."""
-        if float_value < 0:
-            return 0
-        if float_value < 4.5:
-            return round(float_value)
-        if float_value < 5:
-            return 5  # 5-
-        if float_value < 5.5:
-            return 6  # 5+
-        if float_value < 6:
-            return 7  # 6-
-        if float_value < 6.5:
-            return 8  # 6+
-        return 9  # 7
-
-    @staticmethod
-    def intensity_to_text(level: float) -> str:
-        """Converts integer intensity (0-9) to text representation."""
-        level = round(level)  # round() returns int if an integer is passed
-        if 0 <= level < len(INTENSITY_LIST):
-            return INTENSITY_LIST[level]
-        return "不明"
-
-    @staticmethod
-    def estimate_magnitude(intensity: float, distance: float) -> float:
-        """Estimates earthquake magnitude based on intensity and distance (Kawasumi formula)."""
-        if distance <= 0:
-            distance = 1  # Avoid log(0) or division by zero
-        # M = 0.58I + 1.5log10(D) - 0.007D + 0.5
-        return 0.58 * intensity + 1.5 * math.log10(distance) - 0.007 * distance + 0.5
-
-    @staticmethod
-    def estimate_reasonable_magnitude(intensity_float: float) -> float:
-        """Estimates a reasonable earthquake magnitude based on float intensity."""
-        estimated_distance = 30
-        if intensity_float <= 0:
-            estimated_distance = 30
-        elif intensity_float <= 2:
-            estimated_distance = 40
-        elif intensity_float <= 4:
-            estimated_distance = 50
-        elif intensity_float <= 6:
-            estimated_distance = 60
-        else:
-            estimated_distance = 70
-
-        magnitude = IntensityCalculator.estimate_magnitude(
-            intensity_float,
-            estimated_distance,
-        )
-
-        if intensity_float < 0 and magnitude > 3:
-            magnitude = 2 + (intensity_float + 3) * 0.3
-
-        if magnitude < 0:
-            magnitude = 0.0
-        if magnitude > 9:
-            magnitude = 9.0
-        return magnitude
 
 
 async def fetch_data(url: str, timeout_ms: int = 1000) -> httpx.Response | None:
@@ -208,7 +126,7 @@ async def get_station_info() -> dict[str, Any] | None:
 
 async def process_target_area_data(data: dict[str, Any]) -> dict[str, Any] | None:
     """Processes RTS data to find data for target areas."""
-    global area_status, unified_magnitude
+    global area_status
     if not data or "station" not in data:
         return None
 
@@ -222,8 +140,8 @@ async def process_target_area_data(data: dict[str, Any]) -> dict[str, Any] | Non
         "updatedAreas": [],
     }
 
-    total_intensity_float_sum: float = 0.0
-    counted_stations: int = 0
+    # total_intensity_float_sum: float = 0.0 - REMOVED as unused
+    # counted_stations: int = 0 - REMOVED as unused
 
     for station_id, station_data in data["station"].items():
         station_details = current_station_info.get(station_id)
@@ -250,64 +168,32 @@ async def process_target_area_data(data: dict[str, Any]) -> dict[str, Any] | Non
         intensity_float_val = float(station_data.get("i", 0.0))
         intensity_int_val = int(station_data.get("I", 0))
 
-        # For display, if station_data.get('i') is textual like "5-", it would be used.
-        # If it's a float, it's used as is. The current JS seems to treat it as float.
-        # For clarity, we can use intensity_to_text for display from integer intensity.
-        # However, to match JS, we use station_data.get('i') as intensity_text for area_status.
-        # The problem description for JS: `intensityText = stationData.i;`
-        # This implies stationData.i itself is the text to be displayed or a numerical value.
-        # If `stationData.i` is "5-", then `float("5-")` would fail.
-        # Assuming `stationData.i` is numerically convertible if used in calculations.
-        # For `area_status['intensity_text']`, using `IntensityCalculator.intensity_to_text(intensity_int_val)`
-        # would be more robust for textual display, but JS used `stationData.i`.
-        # Let's assume station_data.get('i') is the value to be stored as "text" (could be float string).
         intensity_text_val = str(station_data.get("i", "0"))
 
-        magnitude = IntensityCalculator.estimate_reasonable_magnitude(
-            intensity_float_val,
-        )
-
-        total_intensity_float_sum += intensity_float_val
-        counted_stations += 1
-
         current_area_stat = area_status[area_code]
-        changed = (
-            current_area_stat["pga"] != pga
-            or current_area_stat["intensity"] != intensity_int_val
-        )
 
-        if changed or current_area_stat["lastUpdate"] is None:
-            current_area_stat["pga"] = pga
-            current_area_stat["intensity"] = intensity_int_val
-            # Store the text from station_data.i as per JS logic
-            current_area_stat["intensity_text"] = intensity_text_val
-            current_area_stat["magnitude"] = f"{magnitude:.1f}"
-            current_area_stat["lastUpdate"] = datetime.datetime.now()
-
-            result["updatedAreas"].append(
-                {
-                    "code": area_code,
-                    "name": target_area_config["name"],
-                    "pga": pga,
-                    "intensityFloat": f"{intensity_float_val:.2f}",
-                    "intensity": intensity_int_val,
-                    # Use calculated text for this specific report, but status uses direct 'i'
-                    "intensityText": IntensityCalculator.intensity_to_text(
-                        intensity_int_val,
-                    ),
-                    "magnitude": f"{magnitude:.1f}",
-                    "stationId": station_id,
-                    "location": {
-                        "lat": latest_info.get("lat"),
-                        "lon": latest_info.get("lon"),
-                    },
+        current_area_stat["pga"] = pga
+        current_area_stat["intensity"] = intensity_int_val
+        # Store the text from station_data.i as per JS logic
+        current_area_stat["intensity_text"] = intensity_text_val
+        current_area_stat["magnitude"] = "0.0"  # Set magnitude to "0.0"
+        current_area_stat["lastUpdate"] = datetime.datetime.now()
+        current_area_stat["intensity_float"] = intensity_float_val
+        result["updatedAreas"].append(
+            {
+                "code": area_code,
+                "name": target_area_config["name"],
+                "pga": pga,
+                "intensityFloat": f"{intensity_float_val:.2f}",
+                "intensity": intensity_int_val,
+                # Use calculated text for this specific report, but status uses direct 'i'
+                "magnitude": "0.0",  # Set magnitude to "0.0"
+                "stationId": station_id,
+                "location": {
+                    "lat": latest_info.get("lat"),
+                    "lon": latest_info.get("lon"),
                 },
-            )
-
-    if counted_stations > 0:
-        average_intensity = total_intensity_float_sum / counted_stations
-        unified_magnitude = IntensityCalculator.estimate_reasonable_magnitude(
-            average_intensity,
+            },
         )
 
     return result
@@ -315,16 +201,7 @@ async def process_target_area_data(data: dict[str, Any]) -> dict[str, Any] | Non
 
 async def fetch_realtime_data() -> list[dict[str, Any]]:
     """Fetches real-time data and returns a list of area statuses."""
-    global last_fetch_time, request_counter, area_status
-
-    now = time.time() * 1000  # Current time in milliseconds
-
-    # This condition was part of the original script but might not be desired for an API endpoint
-    # if now - last_fetch_time < CONFIG['interval']:
-    #     return [area_status[area_cfg['code']] for area_cfg in CONFIG['targetAreas']] # Return current status if too soon
-
-    last_fetch_time = now
-    request_counter += 1
+    global area_status
 
     server = get_random_server("lb")
     url = f"https://{server}/api/v2/trem/rts"
@@ -342,7 +219,6 @@ async def fetch_realtime_data() -> list[dict[str, Any]]:
                 await process_target_area_data(
                     rts_data,
                 )  # This updates global area_status
-
         # Always return the current state of area_status after attempting to fetch/process
         return [area_status[area_cfg["code"]] for area_cfg in CONFIG["targetAreas"]]
 

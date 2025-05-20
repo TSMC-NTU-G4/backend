@@ -116,7 +116,6 @@ async def get_realtime_earthquake_data() -> Response:
     area_statuses = (
         await fetch_realtime_data()
     )  # This is the list of dicts from terminal log
-
     if not area_statuses:
         # Return a default structure or an appropriate message if no data
         return {
@@ -161,11 +160,7 @@ async def get_realtime_earthquake_data() -> Response:
         origin_time_str = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
 
     # Determine magnitude_value (e.g., from the first area, assuming it's a unified value)
-    magnitude_str = area_statuses[0].get("magnitude", "0.0")
-    try:
-        magnitude_value = float(magnitude_str)
-    except ValueError:
-        magnitude_value = 0.0
+    magnitude_value = 0.0
 
     shaking_area_list = []
     for area_data in area_statuses:
@@ -173,7 +168,7 @@ async def get_realtime_earthquake_data() -> Response:
         area_code = TARGET_AREAS_NAME_TO_CODE_MAP_FOR_ROUTER.get(area_name)
 
         if area_code is not None:
-            intensity = float(area_data.get("intensity_text", "0"))
+            intensity = float(area_data.get("intensity_float", 0.0))
             if intensity < 0:
                 intensity = 0
             shaking_area_list.append(
