@@ -172,7 +172,10 @@ async def get_realtime_earthquake_data() -> Response:
         await redis_client.publish(
             "alerts",
             json.dumps(
-                {"type": AlertStatus.OPEN, "alert": alert.model_dump_json()},
+                {
+                    "type": AlertStatus.OPEN,
+                    "alert": alert.model_dump_json(by_alias=True),
+                },
             ),
         )
 
