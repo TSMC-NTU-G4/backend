@@ -155,6 +155,7 @@ async def get_realtime_earthquake_data() -> Response:
     if not earthquake_flag:
         return {"message": "No realtime earthquake data available at the moment."}
 
+    # There is earthquake happening currently
     formatted_data = EarthquakeData(
         source="TREM-Lite",
         origin_time=origin_time_str,
@@ -163,6 +164,18 @@ async def get_realtime_earthquake_data() -> Response:
         focal_depth=0,
         shaking_area=shaking_area_list,
     )
+    # Generate corresponding events and alerts
+    alerts = await process_earthquake_data(formatted_data)
+
+    for alert in alerts:
+        # Publish alert to redis channel
+        await redis_client.publish(
+            "alerts",
+            json.dumps(
+                {"type": AlertStatus.OPEN, "alert": alert.model_dump_json()},
+            ),
+        )
+
     return {
         "message": "Realtime earthquake data fetched successfully",
         "data": formatted_data,
