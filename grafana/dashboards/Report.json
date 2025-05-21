@@ -22,9 +22,7 @@
   "links": [],
   "panels": [
     {
-      "datasource": {
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -115,9 +113,7 @@
       "type": "barchart"
     },
     {
-      "datasource": {
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -184,9 +180,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {

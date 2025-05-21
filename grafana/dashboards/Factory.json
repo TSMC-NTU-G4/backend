@@ -35,10 +35,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -108,10 +105,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_alerts_command_center{location=\"Taipei\"}",
@@ -129,10 +123,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -182,10 +173,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_intensity{area=\"Taipei\"}",
@@ -202,10 +190,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -274,10 +259,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_alerts_damage{location=\"Taipei\"}",
@@ -307,10 +289,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -380,10 +359,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_alerts_command_center{location=\"Hsinchu\"}",
@@ -401,10 +377,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -454,10 +427,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_intensity{area=\"Hsinchu\"}",
@@ -474,10 +444,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -546,10 +513,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_alerts_damage{location=\"Hsinchu\"}",
@@ -579,10 +543,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -652,10 +613,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_alerts_command_center{location=\"Taichung\"}",
@@ -673,10 +631,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -726,10 +681,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_intensity{area=\"Taichung\"}",
@@ -746,10 +698,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -818,10 +767,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_alerts_damage{location=\"Taichung\"}",
@@ -851,10 +797,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -924,10 +867,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_alerts_command_center{location=\"Tainan\"}",
@@ -945,10 +885,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -998,10 +935,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_intensity{area=\"Tainan\"}",
@@ -1018,10 +952,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "dem0vb3rbpy4gc"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1090,10 +1021,7 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "dem0vb3rbpy4gc"
-          },
+          "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_alerts_damage{location=\"Tainan\"}",
