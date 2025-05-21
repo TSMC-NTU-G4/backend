@@ -155,7 +155,7 @@ async def get_realtime_earthquake_data() -> Response:
     if not earthquake_flag:
         return {"message": "No realtime earthquake data available at the moment."}
 
-    # There is earthquake happening currently
+    # An earthquake is currently happening
     formatted_data = EarthquakeData(
         source="TREM-Lite",
         origin_time=origin_time_str,
