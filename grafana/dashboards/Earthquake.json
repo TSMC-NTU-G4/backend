@@ -22,7 +22,10 @@
   "links": [],
   "panels": [
     {
-      "datasource": "Prometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "dem0vb3rbpy4gc"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -209,7 +212,10 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "dem0vb3rbpy4gc"
+          },
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_magnitude",
@@ -224,7 +230,10 @@
           "useBackend": false
         },
         {
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "dem0vb3rbpy4gc"
+          },
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_alerts_command_center",
@@ -239,7 +248,10 @@
           "useBackend": false
         },
         {
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "dem0vb3rbpy4gc"
+          },
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_events_severity",
@@ -254,7 +266,10 @@
           "useBackend": false
         },
         {
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "dem0vb3rbpy4gc"
+          },
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "earthquake_depth",
