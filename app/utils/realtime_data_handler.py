@@ -1,14 +1,14 @@
 import datetime
 import random
 import time
+from datetime import UTC
 from typing import Any
 
 import httpx
 import pytz
-from datetime import UTC
 
-from app.models.enums import Location
 from app.models.earthquake import EarthquakeData, ShakingArea
+from app.models.enums import Location
 
 # Configuration parameters (translated from JS CONFIG)
 CONFIG: dict[str, Any] = {
