@@ -4,8 +4,11 @@ import time
 from typing import Any
 
 import httpx
+import pytz
+from datetime import UTC
 
 from app.models.enums import Location
+from app.models.earthquake import EarthquakeData, ShakingArea
 
 # Configuration parameters (translated from JS CONFIG)
 CONFIG: dict[str, Any] = {
@@ -201,8 +204,8 @@ async def process_target_area_data(data: dict[str, Any]) -> dict[str, Any] | Non
     return result
 
 
-async def fetch_realtime_data() -> list[dict[str, Any]]:
-    """Fetches real-time data and returns a list of area statuses."""
+async def fetch_realtime_data() -> EarthquakeData | None:
+    """Fetches real-time data and returns processed EarthquakeData."""
     global area_status
 
     server = get_random_server("lb")
@@ -214,21 +217,61 @@ async def fetch_realtime_data() -> list[dict[str, Any]]:
             try:
                 rts_data = rts_response.json()
             except ValueError:  # Includes JSONDecodeError
-                # print(f"[realtime_data_handler.py] -> Failed to decode JSON from RTS: {url}")
                 rts_data = None
 
             if rts_data:
-                await process_target_area_data(
-                    rts_data,
-                )  # This updates global area_status
-        # Always return the current state of area_status after attempting to fetch/process
-        return [area_status[area_cfg["code"]] for area_cfg in CONFIG["targetAreas"]]
+                await process_target_area_data(rts_data)  # This updates global area_status
 
-    except Exception:  # Catch any other unexpected error during fetch/process
-        # In case of error, return the last known status or an empty list if never populated.
-        # This ensures the API endpoint still returns data in the expected format.
-        # Consider logging the exception here.
-        # print(f"Error fetching/processing real-time data: {error}")
+        # Process area_status into EarthquakeData
+        area_statuses = [area_status[area_cfg["code"]] for area_cfg in CONFIG["targetAreas"]]
+        if not area_statuses:
+            return None
+
+        # Determine origin_time from the most recent lastUpdate
+        latest_update_time = None
+        for status_item in area_statuses:
+            if status_item.get("lastUpdate"):
+                current_item_update_time = status_item["lastUpdate"]
+                if latest_update_time is None or current_item_update_time > latest_update_time:
+                    latest_update_time = current_item_update_time
+
+        taipei_tz = pytz.timezone("Asia/Taipei")
+        if latest_update_time:
+            if latest_update_time.tzinfo is None:
+                origin_datetime_obj = latest_update_time.replace(tzinfo=UTC).astimezone(taipei_tz)
+            else:
+                origin_datetime_obj = latest_update_time.astimezone(taipei_tz)
+        else:
+            origin_datetime_obj = datetime.now(taipei_tz)
+
+        # Process shaking areas
+        shaking_area_list = []
+        earthquake_flag = False
+        for area_data in area_statuses:
+            area_name = area_data.get("name")
+            if area_name is not None:
+                intensity = float(area_data.get("intensity_float", 0.0))
+                if intensity > 0:
+                    earthquake_flag = True
+                shaking_area_list.append(
+                    ShakingArea(county_name=area_name, area_intensity=intensity)
+                )
+
+        if not earthquake_flag:
+            return None
+
+        # Return formatted earthquake data
+        return EarthquakeData(
+            source="TREM-Lite",
+            origin_time=origin_datetime_obj,
+            epicenter_location="",
+            magnitude_value=0,
+            focal_depth=0,
+            shaking_area=shaking_area_list,
+        )
+
+    except Exception:
         if area_status:
-            return [area_status[area_cfg["code"]] for area_cfg in CONFIG["targetAreas"]]
-        return []
+            # Try to process existing area_status data if available
+            return await fetch_realtime_data()
+        return None

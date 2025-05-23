@@ -107,71 +107,12 @@ async def autoclose_expired_alerts() -> Response:
 
 @router.get("/realtime")
 async def get_realtime_earthquake_data() -> Response:
-    area_statuses = (
-        await fetch_realtime_data()
-    )  # This is the list of dicts from terminal log
-    if not area_statuses:
-        # Return a default structure or an appropriate message if no data
+    earthquake_data = await fetch_realtime_data()
+    if not earthquake_data:
         return {"message": "No realtime earthquake data available at the moment."}
 
-    # Determine origin_time from the most recent lastUpdate, default to first area's update or now
-    origin_datetime_obj = None
-    latest_update_time = None
-
-    for status_item in area_statuses:
-        if status_item.get("lastUpdate"):
-            current_item_update_time = status_item["lastUpdate"]
-            if (
-                latest_update_time is None
-                or current_item_update_time > latest_update_time
-            ):
-                latest_update_time = current_item_update_time
-
-    origin_datetime_obj = latest_update_time
-    taipei_tz = pytz.timezone("Asia/Taipei")
-
-    if origin_datetime_obj:
-        # Ensure datetime is timezone-aware (assume UTC if naive, then convert to Taipei)
-        if origin_datetime_obj.tzinfo is None:
-            # If naive, assume it's UTC, then convert to Taipei
-            origin_datetime_obj = origin_datetime_obj.replace(tzinfo=UTC).astimezone(
-                taipei_tz,
-            )
-        else:
-            # If already timezone-aware, just convert to Taipei
-            origin_datetime_obj = origin_datetime_obj.astimezone(taipei_tz)
-        origin_time_str = origin_datetime_obj.isoformat()
-    else:
-        # If no specific update time, use current time in Taipei timezone
-        origin_time_str = datetime.now(taipei_tz).isoformat()
-
-    shaking_area_list = []
-    earthquake_flag = False
-    for area_data in area_statuses:
-        area_name = area_data.get("name")
-
-        if area_name is not None:
-            intensity = float(area_data.get("intensity_float", 0.0))
-            if intensity > 0:
-                earthquake_flag = True
-            shaking_area_list.append(
-                ShakingArea(county_name=area_name, area_intensity=intensity),
-            )
-
-    if not earthquake_flag:
-        return {"message": "No realtime earthquake data available at the moment."}
-
-    # An earthquake is currently happening
-    formatted_data = EarthquakeData(
-        source="TREM-Lite",
-        origin_time=origin_time_str,
-        epicenter_location="",
-        magnitude_value=0,
-        focal_depth=0,
-        shaking_area=shaking_area_list,
-    )
     # Generate corresponding events and alerts
-    alerts = await process_earthquake_data(formatted_data)
+    alerts = await process_earthquake_data(earthquake_data)
 
     for alert in alerts:
         # log realtime alert
@@ -192,5 +133,5 @@ async def get_realtime_earthquake_data() -> Response:
 
     return {
         "message": "Realtime earthquake data fetched successfully",
-        "data": formatted_data,
+        "data": earthquake_data,
     }
