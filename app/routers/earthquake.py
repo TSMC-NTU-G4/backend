@@ -13,6 +13,7 @@ from app.services.earthquake import (
     update_alert_autoclose_metrics,
     update_alert_metrics,
 )
+from app.utils.logger import logger
 from app.utils.realtime_data_handler import fetch_realtime_data
 
 router = APIRouter(prefix="/api/earthquake", tags=["earthquake"])
@@ -86,6 +87,11 @@ async def autoclose_expired_alerts() -> Response:
             # remove alert from redis
             await redis_client.delete(
                 f"alert_{alert.source}_{alert.location.value}_{alert.id}",
+            )
+
+            # log autoclosed alert
+            logger.info(
+                f"Auto-closed alert ID {alert.id} from source {alert.source} at {alert.location.value}.",
             )
 
             # publish alert to redis channel
@@ -168,6 +174,11 @@ async def get_realtime_earthquake_data() -> Response:
     alerts = await process_earthquake_data(formatted_data)
 
     for alert in alerts:
+        # log realtime alert
+        logger.info(
+            f"Received realtime alert ID {alert.id} from source {alert.source} at {alert.location.value}.",
+        )
+
         # Publish alert to redis channel
         await redis_client.publish(
             "alerts",
