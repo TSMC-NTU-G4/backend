@@ -18,6 +18,14 @@ def mock_redis_methods() -> Generator[dict[str, AsyncMock]]:
         patch("app.core.redis.redis_client.set", new_callable=AsyncMock) as mock_set,
         patch("app.core.redis.redis_client.get", new_callable=AsyncMock) as mock_get,
         patch("app.core.redis.redis_client.scan", new_callable=AsyncMock) as mock_scan,
+        patch(
+            "app.core.redis.redis_client.delete",
+            new_callable=AsyncMock,
+        ) as mock_delete,
+        patch(
+            "app.core.redis.redis_client.publish",
+            new_callable=AsyncMock,
+        ) as mock_publish,
     ):
         mock_get.return_value = None
         mock_scan.return_value = (0, [])
@@ -26,4 +34,6 @@ def mock_redis_methods() -> Generator[dict[str, AsyncMock]]:
             "set": mock_set,
             "get": mock_get,
             "scan": mock_scan,
+            "delete": mock_delete,
+            "publish": mock_publish,
         }
