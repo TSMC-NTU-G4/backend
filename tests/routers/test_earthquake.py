@@ -7,7 +7,7 @@ import pytz
 from httpx import AsyncClient
 
 from app.main import app
-from app.models.earthquake import EarthquakeAlert
+from app.models.earthquake import EarthquakeAlert, EarthquakeData, ShakingArea
 from app.models.enums import AlertStatus, Location, SeverityLevel, TriState
 from app.models.response import Response as APIResponse
 
@@ -161,11 +161,19 @@ async def test_get_realtime_earthquake_data(
     mock_fetch: AsyncMock,
     mock_redis_methods: dict[str, AsyncMock],
 ) -> None:
-    # Simulate real-time data with non-zero intensity
-    mock_fetch.return_value = [
-        {"name": "Taipei", "intensity_float": 2.5, "lastUpdate": None},
-        {"name": "Hsinchu", "intensity_float": 0.0, "lastUpdate": None},
-    ]
+    # 模擬真實的地震資料
+    taipei_tz = pytz.timezone("Asia/Taipei")
+    mock_fetch.return_value = EarthquakeData(
+        source="TREM-Lite",
+        origin_time=datetime.now(taipei_tz),
+        epicenter_location="",
+        magnitude_value=4.5,
+        focal_depth=10.0,
+        shaking_area=[
+            ShakingArea(county_name="Taipei", area_intensity=2.5),
+            ShakingArea(county_name="Hsinchu", area_intensity=0.0),
+        ],
+    )
 
     # Mock returned alerts from processing
     mock_process.return_value = [
@@ -189,8 +197,11 @@ async def test_get_realtime_earthquake_data(
     body = response.json()
     assert body["message"] == "Realtime earthquake data fetched successfully"
     assert "data" in body
+    # 驗證回傳的資料格式是否正確
     assert body["data"]["source"] == "TREM-Lite"
-    # assert len(body["data"]["shaking_area"]) > 0
+    assert len(body["data"]["shakingArea"]) == 2
+    assert body["data"]["shakingArea"][0]["countyName"] == "Taipei"
+    assert body["data"]["shakingArea"][0]["areaIntensity"] == 2.5
 
     # Ensure redis publish is called with expected structure
     mock_redis_methods["publish"].assert_called()
