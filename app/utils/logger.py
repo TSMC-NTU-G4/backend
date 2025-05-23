@@ -1,7 +1,7 @@
 import logging
 
 # Configure logger
-logger = logging.getLogger("backend")
+logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 # Avoid duplicate handlers when re-imported
