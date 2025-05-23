@@ -1,11 +1,11 @@
 import json
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 
 import pytz
 from fastapi import APIRouter, HTTPException
 
 from app.core.redis import get_data_by_prefix, redis_client
-from app.models.earthquake import EarthquakeAlert, EarthquakeData, ShakingArea
+from app.models.earthquake import EarthquakeAlert, EarthquakeData
 from app.models.enums import AlertStatus
 from app.models.response import Response
 from app.services.earthquake import (

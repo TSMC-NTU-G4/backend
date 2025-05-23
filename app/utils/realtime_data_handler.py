@@ -221,7 +221,7 @@ async def fetch_realtime_data() -> EarthquakeData | None:
 
             if rts_data:
                 await process_target_area_data(
-                    rts_data
+                    rts_data,
                 )  # This updates global area_status
 
         # Process area_status into EarthquakeData
@@ -246,7 +246,7 @@ async def fetch_realtime_data() -> EarthquakeData | None:
         if latest_update_time:
             if latest_update_time.tzinfo is None:
                 origin_datetime_obj = latest_update_time.replace(tzinfo=UTC).astimezone(
-                    taipei_tz
+                    taipei_tz,
                 )
             else:
                 origin_datetime_obj = latest_update_time.astimezone(taipei_tz)
@@ -263,7 +263,7 @@ async def fetch_realtime_data() -> EarthquakeData | None:
                 if intensity > 0:
                     earthquake_flag = True
                 shaking_area_list.append(
-                    ShakingArea(county_name=area_name, area_intensity=intensity)
+                    ShakingArea(county_name=area_name, area_intensity=intensity),
                 )
 
         if not earthquake_flag:
