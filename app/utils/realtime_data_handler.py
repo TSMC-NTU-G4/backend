@@ -220,10 +220,14 @@ async def fetch_realtime_data() -> EarthquakeData | None:
                 rts_data = None
 
             if rts_data:
-                await process_target_area_data(rts_data)  # This updates global area_status
+                await process_target_area_data(
+                    rts_data
+                )  # This updates global area_status
 
         # Process area_status into EarthquakeData
-        area_statuses = [area_status[area_cfg["code"]] for area_cfg in CONFIG["targetAreas"]]
+        area_statuses = [
+            area_status[area_cfg["code"]] for area_cfg in CONFIG["targetAreas"]
+        ]
         if not area_statuses:
             return None
 
@@ -232,13 +236,18 @@ async def fetch_realtime_data() -> EarthquakeData | None:
         for status_item in area_statuses:
             if status_item.get("lastUpdate"):
                 current_item_update_time = status_item["lastUpdate"]
-                if latest_update_time is None or current_item_update_time > latest_update_time:
+                if (
+                    latest_update_time is None
+                    or current_item_update_time > latest_update_time
+                ):
                     latest_update_time = current_item_update_time
 
         taipei_tz = pytz.timezone("Asia/Taipei")
         if latest_update_time:
             if latest_update_time.tzinfo is None:
-                origin_datetime_obj = latest_update_time.replace(tzinfo=UTC).astimezone(taipei_tz)
+                origin_datetime_obj = latest_update_time.replace(tzinfo=UTC).astimezone(
+                    taipei_tz
+                )
             else:
                 origin_datetime_obj = latest_update_time.astimezone(taipei_tz)
         else:
