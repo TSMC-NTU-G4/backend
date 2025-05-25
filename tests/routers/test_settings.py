@@ -17,7 +17,8 @@ def test_app() -> FastAPI:
 @pytest.mark.asyncio
 async def test_set_suppress_time(test_app: FastAPI) -> None:
     with patch(
-        "app.routers.settings.redis_client.set", new_callable=AsyncMock,
+        "app.routers.settings.redis_client.set",
+        new_callable=AsyncMock,
     ) as mock_set:
         async with AsyncClient(app=test_app, base_url="http://test") as ac:
             payload = {"alert_suppress_time": 120}
@@ -35,7 +36,8 @@ async def test_set_suppress_time(test_app: FastAPI) -> None:
 @pytest.mark.asyncio
 async def test_get_suppress_time(test_app: FastAPI) -> None:
     with patch(
-        "app.routers.settings.get_alert_suppress_time", new_callable=AsyncMock,
+        "app.routers.settings.get_alert_suppress_time",
+        new_callable=AsyncMock,
     ) as mock_get:
         mock_get.return_value = 180
 
