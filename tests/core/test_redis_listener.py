@@ -11,7 +11,8 @@ from app.core import redis_listener
 @patch("app.websockets.manager.manager.broadcast", new_callable=AsyncMock)
 @patch("app.core.redis_listener.redis_client.pubsub")
 async def test_listen_to_alerts(
-    mock_pubsub: MagicMock, mock_broadcast: AsyncMock,
+    mock_pubsub: MagicMock,
+    mock_broadcast: AsyncMock,
 ) -> None:
     fake_pubsub = MagicMock()
     mock_pubsub.return_value = fake_pubsub
