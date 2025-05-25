@@ -28,7 +28,8 @@ def test_health_check_healthy(mock_check_redis: AsyncMock, client: TestClient) -
 
 @patch("app.main.check_redis_connection", new_callable=AsyncMock)
 def test_health_check_unhealthy(
-    mock_check_redis: AsyncMock, client: TestClient,
+    mock_check_redis: AsyncMock,
+    client: TestClient,
 ) -> None:
     mock_check_redis.return_value = False
 
