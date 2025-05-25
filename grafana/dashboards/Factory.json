@@ -1040,8 +1040,8 @@
     "list": []
   },
   "time": {
-    "from": "2025-05-20T02:13:16.428Z",
-    "to": "2025-05-21T02:13:16.428Z"
+    "from": "now-24h",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
