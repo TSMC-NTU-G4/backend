@@ -278,7 +278,7 @@
           "id": "joinByField",
           "options": {
             "byField": "Time",
-            "mode": "outerTabular"
+            "mode": "outer"
           }
         },
         {
@@ -651,7 +651,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
           "expr": "earthquake_alerts_damage{location=\"Taipei\"}",
           "format": "table",
           "hide": false,
@@ -716,7 +716,7 @@
           "id": "joinByField",
           "options": {
             "byField": "Time",
-            "mode": "outerTabular"
+            "mode": "outer"
           }
         },
         {
@@ -901,19 +901,19 @@
     }
   ],
   "preload": false,
-  "refresh": "",
+  "refresh": "10s",
   "schemaVersion": 41,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
   "title": "Earthquake Copy",
   "uid": "83ddaf83-6408-4b59-9941-468e596761c5",
-  "version": 3
+  "version": 7
 }
