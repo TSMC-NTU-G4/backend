@@ -65,7 +65,9 @@ def observe_earthquake_data(data: EarthquakeData) -> None:
 
         # Start thread to set intensity to NaN after 5 seconds
         thread = threading.Thread(
-            target=_set_intensity_to_nan_after_delay, args=(labels, 5), daemon=True,
+            target=_set_intensity_to_nan_after_delay,
+            args=(labels, 5),
+            daemon=True,
         )
         thread.start()
 
