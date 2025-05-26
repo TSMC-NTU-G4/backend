@@ -121,12 +121,12 @@ earthquake_alerts_autoclosed_total = Counter(
 earthquake_alerts_damage = Gauge(
     "earthquake_alerts_damage",
     "Flag of whether there is damage in earthquake alerts",
-    ["source", "id", "location", "origin_time"],
+    ["source", "id", "earthquake_id", "location", "origin_time"],
 )
 earthquake_alerts_command_center = Gauge(
     "earthquake_alerts_command_center",
     "Flag of whether command center is needed in earthquake alerts",
-    ["source", "id", "location", "origin_time"],
+    ["source", "id", "earthquake_id", "location", "origin_time"],
 )
 earthquake_alerts_processing_duration = Gauge(
     "earthquake_alerts_processing_duration",
@@ -138,9 +138,10 @@ earthquake_alerts_processing_duration = Gauge(
 def observe_earthquake_alerts(alerts: list[EarthquakeAlert]) -> None:
     for alert in alerts:
         earthquake_alerts_total.labels(source=alert.source).inc()
-
+        # print(alert.id.split('-')[0])
         earthquake_alerts_damage.labels(
             id=str(alert.id),
+            earthquake_id=str(alert.id.split('-')[0]),
             source=alert.source,
             location=alert.location.value,
             origin_time=alert.origin_time.isoformat(),
@@ -148,6 +149,7 @@ def observe_earthquake_alerts(alerts: list[EarthquakeAlert]) -> None:
 
         earthquake_alerts_command_center.labels(
             id=str(alert.id),
+            earthquake_id=str(alert.id.split('-')[0]),
             source=alert.source,
             location=alert.location.value,
             origin_time=alert.origin_time.isoformat(),
@@ -166,6 +168,7 @@ def observe_earthquake_alert_report(alert: EarthquakeAlert) -> None:
 
     earthquake_alerts_damage.labels(
         id=str(alert.id),
+        earthquake_id=str(alert.id.split('-')[0]),
         source=alert.source,
         location=alert.location.value,
         origin_time=alert.origin_time.isoformat(),
@@ -173,6 +176,7 @@ def observe_earthquake_alert_report(alert: EarthquakeAlert) -> None:
 
     earthquake_alerts_command_center.labels(
         id=str(alert.id),
+        earthquake_id=str(alert.id.split('-')[0]),
         source=alert.source,
         location=alert.location.value,
         origin_time=alert.origin_time.isoformat(),
