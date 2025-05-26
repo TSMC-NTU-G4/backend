@@ -7,6 +7,7 @@ from app.services.metrics import (
     observe_earthquake_alert_report,
     observe_earthquake_alerts,
     observe_earthquake_alerts_autoclose,
+    observe_earthquake_alert_suppress,
     observe_earthquake_data,
     observe_earthquake_events,
 )
@@ -60,6 +61,7 @@ async def generate_alerts(events: list[EarthquakeEvent]) -> list[EarthquakeAlert
                     seconds=alert_suppress_time,
                 )
             ):
+                observe_earthquake_alert_suppress(event)
                 continue
 
         # current event should trigger an alert

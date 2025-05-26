@@ -113,6 +113,12 @@ earthquake_alerts_processed_total = Counter(
     "Total number of processed earthquake alerts",
     ["source"],
 )
+
+earthquake_alerts_suppress_total = Counter(
+    "earthquake_alerts_suppress_total",
+    "Total number of suppressed earthquake alerts",
+    ["source"],
+)
 earthquake_alerts_autoclosed_total = Counter(
     "earthquake_alerts_autoclosed_total",
     "Total number of autoclosed earthquake alerts",
@@ -165,6 +171,13 @@ def observe_earthquake_alerts(alerts: list[EarthquakeAlert]) -> None:
         ).set(alert.processing_duration)
 
 
+def observe_earthquake_alert_suppress(alert_event: EarthquakeEvent) -> None:
+    """Observe suppressed earthquake alert."""
+    # increment total suppress counter
+    earthquake_alerts_total.labels(source=alert_event.source).inc()
+    earthquake_alerts_suppress_total.labels(source=alert_event.source).inc()
+
+
 def observe_earthquake_alert_report(alert: EarthquakeAlert) -> None:
     earthquake_alerts_processed_total.labels(source=alert.source).inc()
 
@@ -196,3 +209,5 @@ def observe_earthquake_alert_report(alert: EarthquakeAlert) -> None:
 
 def observe_earthquake_alerts_autoclose(alert: EarthquakeAlert) -> None:
     earthquake_alerts_autoclosed_total.labels(source=alert.source).inc()
+
+
