@@ -6,7 +6,6 @@ import pytest
 from app.utils import realtime_data_handler as rdh
 
 
-
 @pytest.mark.asyncio
 @patch("app.utils.realtime_data_handler.httpx.AsyncClient")
 async def test_fetch_data_success(mock_async_client_class: AsyncMock) -> None:
