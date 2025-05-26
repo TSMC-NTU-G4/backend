@@ -25,7 +25,7 @@ earthquake_intensity = Gauge(
 )
 earthquake_origin_time = Gauge(
     "earthquake_origin_time",
-    "Area intensity of earthquake data",
+    "Origin time of earthquake data",
     ["source", "id", "epicenter"],
 )
 
