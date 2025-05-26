@@ -384,47 +384,6 @@
   "refresh": "",
   "schemaVersion": 40,
   "tags": [],
-  "templating": {
-    "list": [
-      {
-        "current": {
-          "text": "",
-          "value": ""
-        },
-        "definition": "",
-        "name": "Area",
-        "options": [],
-        "query": {
-          "infinityQuery": {
-            "columns": [
-              {
-                "selector": "CountyName",
-                "text": "",
-                "type": "string"
-              }
-            ],
-            "filters": [],
-            "format": "table",
-            "parser": "backend",
-            "refId": "variable",
-            "root_selector": "",
-            "source": "url",
-            "type": "json",
-            "url": "http://localhost:5000/earthquake",
-            "url_options": {
-              "data": "",
-              "method": "GET"
-            }
-          },
-          "query": "",
-          "queryType": "infinity"
-        },
-        "refresh": 1,
-        "regex": "",
-        "type": "query"
-      }
-    ]
-  },
   "time": {
     "from": "now-30m",
     "to": "now"
