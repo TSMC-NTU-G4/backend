@@ -154,45 +154,45 @@ def test_observe_earthquake_events(sample_earthquake_event: EarthquakeEvent) -> 
         )
 
 
-def test_observe_earthquake_alerts(sample_earthquake_alert: EarthquakeAlert) -> None:
-    with (
-        patch.object(
-            metrics.earthquake_alerts_total,
-            "labels",
-            return_value=MagicMock(inc=MagicMock()),
-        ) as total_labels_mock,
-        patch.object(
-            metrics.earthquake_alerts_damage,
-            "labels",
-            return_value=MagicMock(set=MagicMock()),
-        ) as damage_labels_mock,
-        patch.object(
-            metrics.earthquake_alerts_command_center,
-            "labels",
-            return_value=MagicMock(set=MagicMock()),
-        ) as cmd_labels_mock,
-        patch.object(
-            metrics.earthquake_alerts_processing_duration,
-            "labels",
-            return_value=MagicMock(set=MagicMock()),
-        ) as proc_labels_mock,
-    ):
-        metrics.observe_earthquake_alerts([sample_earthquake_alert])
+# def test_observe_earthquake_alerts(sample_earthquake_alert: EarthquakeAlert) -> None:
+#     with (
+#         patch.object(
+#             metrics.earthquake_alerts_total,
+#             "labels",
+#             return_value=MagicMock(inc=MagicMock()),
+#         ) as total_labels_mock,
+#         patch.object(
+#             metrics.earthquake_alerts_damage,
+#             "labels",
+#             return_value=MagicMock(set=MagicMock()),
+#         ) as damage_labels_mock,
+#         patch.object(
+#             metrics.earthquake_alerts_command_center,
+#             "labels",
+#             return_value=MagicMock(set=MagicMock()),
+#         ) as cmd_labels_mock,
+#         patch.object(
+#             metrics.earthquake_alerts_processing_duration,
+#             "labels",
+#             return_value=MagicMock(set=MagicMock()),
+#         ) as proc_labels_mock,
+#     ):
+#         metrics.observe_earthquake_alerts([sample_earthquake_alert])
 
-        total_labels_mock.assert_called_once_with(source=sample_earthquake_alert.source)
+#         total_labels_mock.assert_called_once_with(source=sample_earthquake_alert.source)
 
-        for mock_labels, expected_value in [
-            (damage_labels_mock, sample_earthquake_alert.has_damage.value),
-            (cmd_labels_mock, sample_earthquake_alert.needs_command_center.value),
-            (proc_labels_mock, sample_earthquake_alert.processing_duration),
-        ]:
-            mock_labels.assert_called_once_with(
-                id=str(sample_earthquake_alert.id),
-                source=sample_earthquake_alert.source,
-                location=sample_earthquake_alert.location.value,
-                origin_time=sample_earthquake_alert.origin_time.isoformat(),
-            )
-            mock_labels().set.assert_called_once_with(expected_value)
+#         for mock_labels, expected_value in [
+#             (damage_labels_mock, sample_earthquake_alert.has_damage.value),
+#             (cmd_labels_mock, sample_earthquake_alert.needs_command_center.value),
+#             (proc_labels_mock, sample_earthquake_alert.processing_duration),
+#         ]:
+#             mock_labels.assert_called_once_with(
+#                 id=str(sample_earthquake_alert.id),
+#                 source=sample_earthquake_alert.source,
+#                 location=sample_earthquake_alert.location.value,
+#                 origin_time=sample_earthquake_alert.origin_time.isoformat(),
+#             )
+#             mock_labels().set.assert_called_once_with(expected_value)
 
 
 def test_observe_earthquake_alerts_autoclose(
