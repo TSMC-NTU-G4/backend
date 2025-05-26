@@ -11,6 +11,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -22,11 +28,14 @@
   "links": [],
   "panels": [
     {
-      "datasource": "Prometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "continuous-GrYlRd"
           },
           "custom": {
             "align": "left",
@@ -35,7 +44,25 @@
             },
             "inspect": false
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "dark-green",
+                  "index": 1
+                },
+                "1": {
+                  "color": "dark-red",
+                  "index": 2
+                },
+                "-1": {
+                  "color": "yellow",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -48,45 +75,10 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "origin_time"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 177
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "id"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 379
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "epicenter"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 123
-              }
-            ]
-          },
           {
             "matcher": {
               "id": "byName",
@@ -95,103 +87,97 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 174
+                "value": 165
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "ID"
+              "options": "Taipei"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 403
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "91bab7c6-e262-4395-8bdf-1693c87e50a6"
+              "options": "Hsinchu"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 99
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "255e17fc-b123-4760-94ef-a6b575a24389"
+              "options": "TaiChung"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 46
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "New_ID"
+              "options": "Tainan"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 169
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "EpiCenter"
-            },
-            "properties": [
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
               {
-                "id": "custom.width",
-                "value": 114
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Magnitude"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 140
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Severity"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 130
+                "id": "custom.align",
+                "value": "center"
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 24,
+        "h": 6,
+        "w": 23,
         "x": 0,
         "y": 0
       },
-      "id": 2,
+      "id": 3,
+      "interval": "600s",
+      "maxDataPoints": 100,
       "options": {
         "cellHeight": "sm",
         "footer": {
@@ -209,81 +195,103 @@
       "pluginVersion": "11.5.2",
       "targets": [
         {
-          "datasource": "Prometheus",
-          "disableTextWrap": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "editorMode": "builder",
-          "expr": "earthquake_magnitude",
+          "exemplar": false,
+          "expr": "max_over_time(earthquake_magnitude[10m])",
           "format": "table",
-          "fullMetaSearch": false,
           "hide": false,
-          "includeNullMetadata": true,
           "instant": false,
+          "legendFormat": "Magnitude",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "expr": "earthquake_alerts_command_center{location=\"Taipei\"}",
+          "format": "table",
+          "hide": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A",
-          "useBackend": false
+          "refId": "B"
         },
         {
-          "datasource": "Prometheus",
-          "disableTextWrap": false,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "editorMode": "builder",
-          "expr": "earthquake_alerts_command_center",
+          "expr": "earthquake_alerts_command_center{location=\"Hsinchu\"}",
           "format": "table",
-          "fullMetaSearch": false,
           "hide": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "{{label_name}}",
-          "range": true,
-          "refId": "B",
-          "useBackend": false
-        },
-        {
-          "datasource": "Prometheus",
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "earthquake_events_severity",
-          "format": "table",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": true,
-          "instant": false,
-          "legendFormat": "{{label_name}}",
-          "range": true,
-          "refId": "C",
-          "useBackend": false
-        },
-        {
-          "datasource": "Prometheus",
-          "disableTextWrap": false,
-          "editorMode": "builder",
-          "expr": "earthquake_depth",
-          "format": "table",
-          "fullMetaSearch": false,
-          "hide": false,
-          "includeNullMetadata": true,
-          "instant": false,
           "legendFormat": "__auto",
           "range": true,
-          "refId": "D",
-          "useBackend": false
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "expr": "earthquake_alerts_command_center{location=\"Taichung\"}",
+          "format": "table",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "expr": "earthquake_alerts_command_center{location=\"Tainan\"}",
+          "format": "table",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "E"
         }
       ],
-      "title": "Earthquake",
+      "title": "Command",
       "transformations": [
         {
-          "id": "extractFields",
+          "id": "joinByField",
           "options": {
-            "delimiter": ",",
-            "format": "regexp",
-            "regExp": "/(?<New_ID>.*^.{36})/",
-            "source": "id"
+            "byField": "Time",
+            "mode": "inner"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Value #D": "",
+              "earthquake_id": "ID",
+              "earthquake_id 1": "ID",
+              "earthquake_id 2": "ID",
+              "earthquake_id 3": "ID",
+              "id": "ID",
+              "id 5": "ID",
+              "instance 2": ""
+            }
           }
         },
         {
           "id": "joinByField",
           "options": {
-            "byField": "New_ID",
+            "byField": "ID",
             "mode": "inner"
           }
         },
@@ -295,12 +303,11 @@
                 "aggregations": [],
                 "operation": "groupby"
               },
-              "New_ID": {
-                "aggregations": [],
-                "operation": "groupby"
-              },
-              "Time": {
-                "aggregations": []
+              "Value": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
               },
               "Value #A": {
                 "aggregations": [
@@ -309,27 +316,36 @@
                 "operation": "aggregate"
               },
               "Value #B": {
-                "aggregations": [],
+                "aggregations": [
+                  "first"
+                ],
                 "operation": "aggregate"
               },
               "Value #C": {
                 "aggregations": [
-                  "firstNotNull"
+                  "first"
                 ],
                 "operation": "aggregate"
               },
               "Value #D": {
                 "aggregations": [
-                  "lastNotNull"
+                  "first"
                 ],
                 "operation": "aggregate"
               },
-              "__name__": {
-                "aggregations": []
+              "Value #E": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "earthquake_id": {
+                "aggregations": [],
+                "operation": "groupby"
               },
               "epicenter": {
                 "aggregations": [
-                  "last"
+                  "first"
                 ],
                 "operation": "aggregate"
               },
@@ -337,42 +353,480 @@
                 "aggregations": []
               },
               "location": {
-                "aggregations": [],
-                "operation": "aggregate"
+                "aggregations": []
               },
               "origin_time": {
-                "aggregations": [],
-                "operation": "groupby"
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "origin_time 1": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
               }
             }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "binary": {
+              "left": "Value #B (first)",
+              "operator": "*",
+              "reducer": "sum",
+              "right": "1000"
+            },
+            "mode": "binary",
+            "reduce": {
+              "include": [
+                "Value #B (first)"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": false
           }
         },
         {
           "id": "organize",
           "options": {
             "excludeByName": {
-              "Value #A (lastNotNull)": true,
-              "epicenter": false,
-              "epicenter (last) 2": true,
-              "id": false,
-              "location (last)": false,
-              "origin_time": false
+              "ID": true,
+              "Value #B (first)": false,
+              "Value #B (first) * 1000": true,
+              "epicenter (first) 2": true
             },
-            "includeByName": {},
+            "indexByName": {
+              "ID": 0,
+              "Value #A (first)": 3,
+              "Value #B (first)": 4,
+              "Value #B (first) * 1000": 6,
+              "Value #C (first)": 5,
+              "Value #D (first)": 7,
+              "Value #E (first)": 8,
+              "epicenter (first)": 2,
+              "origin_time 1 (first)": 1
+            },
+            "renameByName": {
+              "Value #A (first)": "Magnitude",
+              "Value #B (first)": "Taipei",
+              "Value #B (first) * 1000": "",
+              "Value #C (first)": "Hsinchu",
+              "Value #D (first)": "TaiChung",
+              "Value #E (first)": "Tainan",
+              "Value (first)": "Taipei_Command",
+              "earthquake_id": "id",
+              "epicenter (first)": "EpiCenter",
+              "epicenter (first) 1": "EpiCenter",
+              "epicenter (first) 2": "",
+              "id": "ID",
+              "origin_time (first)": "Origin_time",
+              "origin_time 1 (first)": "Origin_Time"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "dark-green",
+                  "index": 1
+                },
+                "1": {
+                  "color": "dark-red",
+                  "index": 2
+                },
+                "-1": {
+                  "color": "yellow",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Origin_Time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 165
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Taipei"
+            },
+            "properties": [
+              {
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Hsinchu"
+            },
+            "properties": [
+              {
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TaiChung"
+            },
+            "properties": [
+              {
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Tainan"
+            },
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 23,
+        "x": 0,
+        "y": 6
+      },
+      "id": 4,
+      "interval": "600s",
+      "maxDataPoints": 100,
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "frameIndex": 1,
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "11.5.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "max_over_time(earthquake_magnitude[10m])",
+          "format": "table",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Magnitude",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "expr": "earthquake_alerts_damage{location=\"Taipei\"}",
+          "format": "table",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "expr": "earthquake_alerts_damage{location=\"Hsinchu\"}",
+          "format": "table",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "expr": "earthquake_alerts_damage{location=\"Taichung\"}",
+          "format": "table",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "expr": "earthquake_alerts_damage{location=\"Tainan\"}",
+          "format": "table",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "E"
+        }
+      ],
+      "title": "Damage",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "Time",
+            "mode": "inner"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
             "indexByName": {},
             "renameByName": {
-              "New_ID": "",
-              "Value #A (first)": "Magnitude",
-              "Value #A (lastNotNull)": "Magnitude",
-              "Value #C (firstNotNull)": "Severity",
-              "Value #D (lastNotNull)": "Depth",
-              "epicenter": "EpiCenter",
-              "epicenter (last)": "EpiCenter",
-              "epicenter (last) 1": "EpiCenter",
+              "Value #D": "",
+              "earthquake_id": "ID",
+              "earthquake_id 1": "ID",
+              "earthquake_id 2": "ID",
+              "earthquake_id 3": "ID",
               "id": "ID",
-              "location": "",
-              "location (last)": "Location",
-              "origin_time": "Origin_Time"
+              "id 5": "ID",
+              "instance 2": ""
+            }
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "ID",
+            "mode": "inner"
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "ID": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Value": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "Value #A": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "Value #B": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "Value #C": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "Value #D": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "Value #E": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "earthquake_id": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "epicenter": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "id": {
+                "aggregations": []
+              },
+              "location": {
+                "aggregations": []
+              },
+              "origin_time": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "origin_time 1": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              }
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "binary": {
+              "left": "Value #B (first)",
+              "operator": "*",
+              "reducer": "sum",
+              "right": "1000"
+            },
+            "mode": "binary",
+            "reduce": {
+              "include": [
+                "Value #B (first)"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "ID": true,
+              "Value #B (first)": false,
+              "Value #B (first) * 1000": true,
+              "epicenter (first) 2": true
+            },
+            "indexByName": {
+              "ID": 0,
+              "Value #A (first)": 3,
+              "Value #B (first)": 4,
+              "Value #B (first) * 1000": 6,
+              "Value #C (first)": 5,
+              "Value #D (first)": 7,
+              "Value #E (first)": 8,
+              "epicenter (first)": 2,
+              "origin_time 1 (first)": 1
+            },
+            "renameByName": {
+              "Value #A (first)": "Magnitude",
+              "Value #B (first)": "Taipei",
+              "Value #B (first) * 1000": "",
+              "Value #C (first)": "Hsinchu",
+              "Value #D (first)": "TaiChung",
+              "Value #E (first)": "Tainan",
+              "Value (first)": "Taipei_Command",
+              "earthquake_id": "id",
+              "epicenter (first)": "EpiCenter",
+              "epicenter (first) 1": "EpiCenter",
+              "epicenter (first) 2": "",
+              "id": "ID",
+              "origin_time (first)": "Origin_time",
+              "origin_time 1 (first)": "Origin_Time"
             }
           }
         }
@@ -384,6 +838,9 @@
   "refresh": "",
   "schemaVersion": 40,
   "tags": [],
+  "templating": {
+    "list": []
+  },
   "time": {
     "from": "now-30m",
     "to": "now"
@@ -392,6 +849,6 @@
   "timezone": "browser",
   "title": "Earthquake",
   "uid": "cem0vlevv4f0gd",
-  "version": 34,
+  "version": 39,
   "weekStart": ""
 }
