@@ -141,7 +141,7 @@ def observe_earthquake_alerts(alerts: list[EarthquakeAlert]) -> None:
         # print(alert.id.split('-')[0])
         earthquake_alerts_damage.labels(
             id=str(alert.id),
-            earthquake_id=str(alert.id.split('-')[0]),
+            earthquake_id=str(alert.id.split("-")[0]),
             source=alert.source,
             location=alert.location.value,
             origin_time=alert.origin_time.isoformat(),
@@ -149,7 +149,7 @@ def observe_earthquake_alerts(alerts: list[EarthquakeAlert]) -> None:
 
         earthquake_alerts_command_center.labels(
             id=str(alert.id),
-            earthquake_id=str(alert.id.split('-')[0]),
+            earthquake_id=str(alert.id.split("-")[0]),
             source=alert.source,
             location=alert.location.value,
             origin_time=alert.origin_time.isoformat(),
@@ -168,7 +168,7 @@ def observe_earthquake_alert_report(alert: EarthquakeAlert) -> None:
 
     earthquake_alerts_damage.labels(
         id=str(alert.id),
-        earthquake_id=str(alert.id.split('-')[0]),
+        earthquake_id=str(alert.id.split("-")[0]),
         source=alert.source,
         location=alert.location.value,
         origin_time=alert.origin_time.isoformat(),
@@ -176,7 +176,7 @@ def observe_earthquake_alert_report(alert: EarthquakeAlert) -> None:
 
     earthquake_alerts_command_center.labels(
         id=str(alert.id),
-        earthquake_id=str(alert.id.split('-')[0]),
+        earthquake_id=str(alert.id.split("-")[0]),
         source=alert.source,
         location=alert.location.value,
         origin_time=alert.origin_time.isoformat(),
