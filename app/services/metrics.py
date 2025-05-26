@@ -1,4 +1,7 @@
 from prometheus_client import Counter, Gauge
+import threading
+import time
+import math
 
 from app.models.earthquake import EarthquakeAlert, EarthquakeData, EarthquakeEvent
 
@@ -41,13 +44,27 @@ def observe_earthquake_data(data: EarthquakeData) -> None:
         epicenter=data.epicenter_location,
     ).set(data.focal_depth)
 
-    # set intensity for each area
+    # set intensity for each area and start thread to set to NaN after 5 seconds
     for area in data.shaking_area:
-        earthquake_intensity.labels(
-            id=str(data.id),
-            source=data.source,
-            area=area.county_name.value,
-        ).set(area.area_intensity)
+        labels = {
+            'id': str(data.id),
+            'source': data.source,
+            'area': area.county_name.value,
+        }
+        earthquake_intensity.labels(**labels).set(area.area_intensity)
+        
+        # Start thread to set intensity to NaN after 5 seconds
+        thread = threading.Thread(
+            target=_set_intensity_to_nan_after_delay,
+            args=(labels, 5),
+            daemon=True
+        )
+        thread.start()
+
+def _set_intensity_to_nan_after_delay(labels: dict, delay_seconds: int) -> None:
+    """Set earthquake intensity to NaN after specified delay."""
+    time.sleep(delay_seconds)
+    earthquake_intensity.labels(**labels).set(float('nan'))
 
 
 # --- Earthquake event metrics ---
