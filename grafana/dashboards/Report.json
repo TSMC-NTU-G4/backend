@@ -277,7 +277,7 @@
               }
             ]
           },
-          "unit": "ms"
+          "unit": "seconds"
         },
         "overrides": []
       },
@@ -524,7 +524,7 @@
               }
             ]
           },
-          "unit": "ms"
+          "unit": "seconds"
         },
         "overrides": []
       },
