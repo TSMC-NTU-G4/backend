@@ -23,6 +23,11 @@ earthquake_intensity = Gauge(
     "Area intensity of earthquake data",
     ["source", "id", "area"],
 )
+earthquake_origin_time = Gauge(
+    "earthquake_origin_time",
+    "Area intensity of earthquake data",
+    ["source", "id", "epicenter"],
+)
 
 
 def observe_earthquake_data(data: EarthquakeData) -> None:
@@ -40,6 +45,11 @@ def observe_earthquake_data(data: EarthquakeData) -> None:
         source=data.source,
         epicenter=data.epicenter_location,
     ).set(data.focal_depth)
+    earthquake_origin_time.labels(
+        id=str(data.id),
+        source=data.source,
+        epicenter=data.epicenter_location,
+    ).set(data.origin_time.timestamp())
 
     # set intensity for each area
     for area in data.shaking_area:
